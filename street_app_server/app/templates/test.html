@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>启动设备</title>
+	<meta name="viewport" 
+    content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name = "format-detection" content = "telephone=no">
+    <<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/weui.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/jquery-weui.min.css') }}">
+
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/index.css') }}?v=1">
+	<style type="text/css">
+		html,body{
+			background: #fff;
+		}
+	</style>
+	<script src="//cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+	<script type="text/javascript">
+		$SCRIPT_ROOT={{request.script_root|tojson|safe}};
+		
+	</script>
+</head>
+<body>
+<div class="weui-tab">
+	<div class="weui-navbar">
+		<a class="weui-navbar__item weui-bar__item--on" href="#tab1">
+      		脉冲
+    	</a>
+    	<a class="weui-navbar__item" href="#tab2">
+     		继电器
+    	</a>
+	</div>
+	<div class="weui-tab__bd">
+		<div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+			<div class="weui-cells weui-cells_form">
+				<div class="weui-cell">
+				    <div class="weui-cell__hd">
+				    	<label class="weui-label">imei</label>
+				    </div>
+				    <div class="weui-cell__bd">
+				      	<input class="weui-input pulse_imei" type="number" pattern="[0-9]{0,15}" placeholder="请输入imei">
+				    </div>
+				</div>
+				<div class="weui-cell">
+				    <div class="weui-cell__hd">
+				        <label class="weui-label">低电平</label>
+				    </div>
+				    <div class="weui-cell__bd">
+				        <input class="weui-input pulse_high" type="number" placeholder="不低于50的整数">
+				    </div>
+				    <div class="weui-cell__ft">
+				        <label class="weui-label">毫秒（ms）</label>
+				    </div>
+				</div>
+				<div class="weui-cell">
+				    <div class="weui-cell__hd">
+				        <label class="weui-label">高电平</label>
+				    </div>
+				    <div class="weui-cell__bd">
+				    	<input class="weui-input pulse_low" type="number" placeholder="不低于50的整数">
+				    </div>
+				    <div class="weui-cell__ft">
+				        <label class="weui-label">毫秒（ms）</label>
+				    </div>
+				</div>
+				<div class="weui-cell">
+				    <div class="weui-cell__hd">
+				        <label class="weui-label">脉冲个数</label>
+				    </div>
+				    <div class="weui-cell__bd">
+				    	<input class="weui-input pulse_pulse" type="number" placeholder="大于0的整数">
+				    </div>
+				    <div class="weui-cell__ft">
+				        <label class="weui-label">个</label>
+				    </div>
+				</div>
+				<div class="weui-cell">
+				    <div class="weui-cell__hd">
+				        <label class="weui-label">key</label>
+				    </div>
+				    <div class="weui-cell__bd">
+				    	<input class="weui-input key1" type="text" placeholder="选填，默认为0">
+				    </div>
+				    
+				</div>
+			</div>
+			<div class="weui-cells__tips" id='pulse_tips'></div>
+			<div class="weui-btn-area">
+		      	<button class="weui-btn weui-btn_primary" href="javascript:" id="pulse">确定</button>
+		    </div>
+		</div>
+		<div id="tab2" class="weui-tab__bd-item">
+	      	<div class="weui-cells weui-cells_form">
+				<div class="weui-cell">
+				    <div class="weui-cell__hd">
+				    	<label class="weui-label">imei</label>
+				    </div>
+				    <div class="weui-cell__bd">
+				      	<input class="weui-input relay_imei" type="number" pattern="[0-9]{15}" placeholder="请输入imei">
+				    </div>
+				</div>
+				<div class="weui-cell">
+				    <div class="weui-cell__hd">
+				        <label class="weui-label">时长</label>
+				    </div>
+				    <div class="weui-cell__bd">
+				        <input class="weui-input relay_s" type="number" placeholder="请输入整数">
+				    </div>
+				    <div class="weui-cell__ft">
+				        <label class="weui-label">秒（s）</label>
+				    </div>
+				</div>
+				<div class="weui-cell">
+				    <div class="weui-cell__hd">
+				        <label class="weui-label">key</label>
+				    </div>
+				    <div class="weui-cell__bd">
+				    	<input class="weui-input key2" type="text" placeholder="选填，默认为0">
+				    </div>
+				    
+				</div>
+			</div>
+			<div class="weui-cells__tips" id='relay_tips'></div>
+			<div class="weui-btn-area">
+		      	<button class="weui-btn weui-btn_primary" href="javascript:" id="relay">确定</button>
+		    </div>
+	    </div>
+	</div>
+</div>
+</body>
+<script src="{{ url_for('static',filename='js/jquery-weui.min.js') }}"></script>
+<script src="{{ url_for('static',filename='js/index.js') }}?v=1"></script>
+<script src="{{ url_for('static',filename='js/test.js') }}?v=4"></script>
+</html>

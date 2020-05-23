@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+        <meta name="renderer" content="webkit|ie-comp|ie-stand" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+       <!--  <meta name="viewport"
+         content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/> -->
+        <meta charset="utf-8" />
+        <meta name="keywords" content="" />
+        <meta name="description" content="" />
+        <title></title>
+        <link rel="Shortcut Icon" href="logo.ico">
+        <link rel="stylesheet" type="text/css"
+            href="/adminpage-mobile/assets/css/antd-mobile.min.css" />
+
+        <link rel="stylesheet" type="text/css"
+            href="/adminpage-mobile/assets/css/admin.css?_rnd=0.30701780571608817" />
+        <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=1oZv85SLXeVeBKSCfNC70py1b1TnIRb3"></script>
+        <script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+        <script src="https://as.alipayobjects.com/g/component/fastclick/1.0.6/fastclick.js"></script>
+        <script>
+            if ('addEventListener' in document) {
+                document.addEventListener('DOMContentLoaded', function() {
+                    FastClick.attach(document.body);
+                }, false);
+            }
+            if(!window.Promise) {
+                document.writeln('<script src="https://as.alipayobjects.com/g/component/es6-promise/3.2.2/es6-promise.min.js"'+'>'+'<'+'/'+'script>');
+            }
+        </script>
+    </head>
+
+    <body>
+        <div class="react-container" id="react-container">
+            <!-- React Container -->
+        </div>
+
+    </body>
+    <script type="text/javascript">
+        if (typeof String.prototype.startsWith != 'function') {
+            String.prototype.startsWith = function (prefix){
+                return this.slice(0, prefix.length) === prefix;
+            };
+        }
+    </script>
+    <script type="text/javascript" src="/adminpage-mobile/assets/js/gpstobaidu.js"></script>
+    <script type="text/javascript" async
+        src="/adminpage-mobile/assets/js/admin.bundle.js?_rnd=0.059729440371893316"></script>
+</html>

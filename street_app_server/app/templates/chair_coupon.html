@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" 
+    content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name = "format-detection" content = "telephone=no">
+	<title>码夫支付</title>
+	<script src="{{ url_for('static',filename='js/layer.js') }}"></script>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='js/need/layer.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/weui.min.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/jquery-weui.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/swiper-4.1.0.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/index.css') }}?v=1.11">
+	<script src="{{ url_for('static',filename='js/rem.js') }}"></script>
+	<script type="text/javascript">
+		$SCRIPT_ROOT={{request.script_root|tojson|safe}};
+		
+	</script>
+</head>
+<body>
+	<div id='coupon_body'>
+		<div class='head'>
+			<img class='user' src="{{ url_for('static',filename='img/user.png') }}"/>
+			<div class='icons'>
+				<span>欢迎使用</span>
+				<span id = 'balance'></span>
+			</div>
+			<div class = 'right'>
+				<p id='title'>码夫支付</p>
+				<span id='state'>请使用</span>
+			</div>
+		</div>
+		<div class='center'>
+			<div class = 'b_border'>
+				<div class="chair_model">
+					<img class="choose" src="{{ url_for('static',filename='img/choose.png') }}" style='display: block'>
+					<span><p>免费</p><p>0.5分钟</p></span>
+					<span><p>免费体验</p></span>
+				</div>
+			</div>
+
+		</div>
+		<div class = 'chair_footer'>
+			<p id = 'chair_money'></p>
+			<button id='chair_pay' >现在启动</button>
+		</div>
+	</div>
+	<div class='coupon'>
+		<img id='coupon_img' title='' src='' />
+		<a id='coupon_btn' href="javascript:;" class="weui-btn weui-btn_primary">我已保存图片</a>
+	</div>
+</body>
+<script src="{{ url_for('static',filename='js/jquery-2.2.3.min.js') }}"></script>
+<script src="{{ url_for('static',filename='js/jquery-weui.min.js') }}?v=1"></script>
+<script type="text/javascript" async src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="{{ url_for('static',filename='js/chair_coupon.js') }}?v=1.20"></script>
+
+</html>

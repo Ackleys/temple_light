@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<script src="http://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+	<script type="text/javascript">
+		$SCRIPT_ROOT={{request.script_root|tojson|safe}};
+		
+	</script>
+	<style type="text/css">
+		button{
+			width: 50vw;
+			height:10vh;	
+		}
+	</style>
+</head>
+<body>
+	<form id='myform' method="POST" action="https://openapi.alipay.com/gateway.do">
+	</form>
+	<button id='btn'>点击跳转</button>
+
+</body>
+
+<script type="text/javascript">
+	alert('start');
+	function IsWeixinOrAlipay(){
+	    var ua = window.navigator.userAgent.toLowerCase();
+	    //判断是不是微信
+	    if ( ua.match(/MicroMessenger/i) == 'micromessenger' ) {  
+	        alert ("WeiXIN");  
+	    }    
+	    //判断是不是支付宝
+	    if (ua.match(/AlipayClient/i) == 'alipayclient') {
+	        alert ("Alipay");  
+	    }
+	}
+	IsWeixinOrAlipay();
+	function getmsg(){
+        var url = $SCRIPT_ROOT+'/api/alitest';
+        var test = '';
+        var callback = function(err,res){
+            if(err){
+
+            }else{
+                var data =  res.body.data;   
+                console.log(data);
+                for (var i in data){
+                	test+="<input type='hidden' name='"+i+"' value='"+data[i]+"' />";	
+                }
+                document.getElementById('myform').innerHTML = test;
+            }
+        };
+        var xhr  = new XMLHttpRequest();
+        xhr.open("GET", url);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=utf-8") ; 
+        xhr.send(null);
+        xhr.onreadystatechange = function() {
+            if(xhr.readyState === XMLHttpRequest.DONE) {
+                if(xhr.status === 200) {
+                    callback(null,{body:JSON.parse(xhr.responseText)});
+                } else {
+                    callback({err:JSON.parse(xhr.responseText)},null);
+                }
+            }
+        };
+    }
+    $('#btn').click(function(){
+    	document.getElementById('myform').submit();
+    })
+    getmsg();
+    
+</script>
+</html>

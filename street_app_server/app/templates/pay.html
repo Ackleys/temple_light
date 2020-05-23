@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" 
+    content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name = "format-detection" content = "telephone=no">
+	<title>付款</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/weui.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/jquery-weui.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/index.css') }}?v=2">
+	<script src="{{ url_for('static',filename='js/rem.js') }}"></script>
+	<script type="text/javascript">
+		$SCRIPT_ROOT={{request.script_root|tojson|safe}};
+		
+	</script>
+</head>
+<body>
+	<div class='pay'>正在支付，请等待</div>
+</body>
+<script src="{{ url_for('static',filename='js/jquery-2.2.3.min.js') }}"></script>
+<script src="{{ url_for('static',filename='js/jquery-weui.min.js') }}?v=1"></script>
+<script type="text/javascript" async src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="{{ url_for('static',filename='js/index.js') }}?v=1"></script>
+<script src="{{ url_for('static',filename='js/pay.js') }}?v=6.01"></script>
