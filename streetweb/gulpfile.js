@@ -1,4 +1,4 @@
-#!/usr/bin/node
+
 "use strict";
 
 var fs = require("fs");
@@ -236,11 +236,11 @@ gulp.task('webserver', () => {
         port: 2333,
         middleware: (conn, opt) => ([
             createProxyMiddleware('/admin', {
-                target: 'http://server.fzstack.com',
+                target: 'http://127.0.0.1:5000',
                 changeOrigin: true,
             }),
             createProxyMiddleware('/static', {
-                target: 'http://server.fzstack.com',
+                target: 'http://127.0.0.1:5000',
                 changeOrigin: true,
             }),
             history(),

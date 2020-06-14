@@ -3,11 +3,11 @@ import os
 # 下面是主要数据库服务器的地址
 MYSQL_USER = 'root'
 MYSQL_PASSWORD = 'root'
-MYSQL_IP = '127.0.0.1'
+MYSQL_IP = 'placeholder'
 DOMAIN = 'server.fzstack.com'  # 这里要填写域名
 
-MONGODB_ADDRESS  = "mongodb://127.0.0.1:27017"
-MONGODB_ADDRESS_WST  = "mongodb://127.0.0.1:27017"
+MONGODB_ADDRESS  = "mongodb://placeholder:27017"
+MONGODB_ADDRESS_WST  = "mongodb://placeholder:27017"
 USER_MYSQL_URI = 'mysql+mysqlconnector://%s:%s@%s/CWS_APP' % (MYSQL_USER, MYSQL_PASSWORD, MYSQL_IP)
 
 ASSETS_PATH = '/root/projects/fw-share/streetweb/assets'
@@ -31,13 +31,13 @@ if os.environ.get("production"):
     DEFAULT_PASSWORD = '888888'
     SECONDS_PER_MINITE = 60
     WECHAT_PAY_KEY_PATH = '/root/projects/fw-share/street_app_server/keys/pro'
-    WECHAT_PAY_OUT_HOST = '127.0.0.1'
+    WECHAT_PAY_OUT_HOST = 'placeholder'
 
     ALI_PAY_KEY_PATH = '/root/projects/fw-share/street_app_server/keys/pro/alipay'
 
     PROJECT_TAG = "street_machine"
     DEVICE_MQTT_WAITING_TIME = 16
-    MQTT_BROKER_IP = '127.0.0.1'
+    MQTT_BROKER_IP = 'placeholder'
 
     # agent setting
     MIN_WTIHDRAW = 100
@@ -67,13 +67,13 @@ else:
 
     # 下面的两个支付密钥
     WECHAT_PAY_KEY_PATH = '/root/projects/fw-share/street_app_server/keys/dev'
-    WECHAT_PAY_OUT_HOST = '127.0.0.1'
+    WECHAT_PAY_OUT_HOST = 'placeholder'
 
     ALI_PAY_KEY_PATH = '/root/projects/fw-share/street_app_server/keys/dev/alipay'
 
     PROJECT_TAG = "street_machine_test"
     DEVICE_MQTT_WAITING_TIME = 16
-    MQTT_BROKER_IP = '127.0.0.1'
+    MQTT_BROKER_IP = 'placeholder'
 
     # agent setting
     MIN_WTIHDRAW = 200
@@ -97,8 +97,8 @@ class Config:
     SESSION_MONGODB_COLLECT = 'street_session'
 
     # celery
-    CELERY_BROKER_URL = 'pyamqp://guest@localhost//' 
-    CELERY_RESULT_BACKEND = 'redis://localhost:6379/0' 
+    CELERY_BROKER_URL = 'pyamqp://guest@placeholder//' 
+    CELERY_RESULT_BACKEND = 'redis://placeholder:6379/0' 
     CELERY_TASK_SERIALIZER = 'json'
 
     @staticmethod

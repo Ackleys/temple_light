@@ -90,6 +90,9 @@ var init = function (){
 			<Route path={window.URL_PREFIX+"/chair"} component={App}>
 				<IndexRoute component={Admin.Chair} />
 			</Route>
+			<Route path={window.URL_PREFIX+"/uart"} component={App}>
+				<IndexRoute component={Admin.Uart} />
+			</Route>
 			<Route path={window.URL_PREFIX+"/player"} component={App}>
 				<IndexRoute component={Admin.Player} />
 			</Route>

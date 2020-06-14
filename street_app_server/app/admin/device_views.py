@@ -98,6 +98,8 @@ def get_device_cat():
     data = {
         0: '倒计时',
         1: '投币器',
+        2: '串口',
+        3: '烛灯1.0',
     }
     reply['data'] = data
     return make_response(jsonify(reply), status_code)

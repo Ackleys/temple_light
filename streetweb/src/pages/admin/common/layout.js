@@ -151,6 +151,7 @@ const MyLayout = React.createClass({
 				  {"title":"设备类型","icon":"bars","children":[
 					{'title':'倒计时类型','to':window.URL_PREFIX+'/chair'},
 					{'title':'投币器类型','to':window.URL_PREFIX+'/doll'},
+					{'title':'串口类型','to':window.URL_PREFIX+'/uart'},
 					/*
 					{'title':'串口类型','to':window.URL_PREFIX+'/uart'},
 					{'title':'烛灯','to':window.URL_PREFIX+'/doll'},
