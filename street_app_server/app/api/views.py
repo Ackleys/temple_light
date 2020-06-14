@@ -172,6 +172,92 @@ def get_wechat_title():
     return make_response(jsonify(reply), status_code)
 
 
+
+@api_blueprint.route('/ysq_test', methods=["GET"])
+def ysq_test():
+    reply ,status_code = {'code': 0, 'msg': ''}, 200
+    try:
+        ...
+        # data = request.get_json()
+        # imei = data['imei']
+    except:
+        print_exception_info()
+        raise ApiError('ERROR_PARAM', error.ERROR_PARAM)
+    reply['data'] = {
+        'temples': [ {
+                'name': '大雄宝殿',
+                'id': 1,
+                'lights': [{
+                    'name': '健康灯',
+                    'id': 1,
+                    'price': 0.1,
+                }, {
+                    'name': '亲情灯',
+                    'id': 2,
+                    'price': 0.15,
+                }, {
+                    'name': '爱情灯',
+                    'id': 3,
+                    'price': 0.22,
+                }, {
+                    'name': '友情灯',
+                    'id': 4,
+                    'price': 0.05,
+                }, {
+                    'name': '事业灯',
+                    'id': 5,
+                    'price': 0.25,
+                }, {
+                    'name': '学业灯',
+                    'id': 6,
+                    'price': 0.12,
+                }, {
+                    'name': '幸运灯',
+                    'id': 7,
+                    'price': 0.23,
+                }, {
+                    'name': '桃花灯',
+                    'id': 8,
+                    'price': 0.17,
+                }, {
+                    'name': '随便灯',
+                    'id': 9,
+                    'price': 0.32,
+                }]
+            },{
+                'name': '大雷音寺',
+                'id': 2,
+                'lights': [],
+            }, {
+                'name': '小雷音寺',
+                'id': 3,
+            }
+        ],
+        'packages': [{
+            'id': 0,
+            'name': '日供',
+            'rate': 1,
+        }, {
+            'id': 1,
+            'name': '七日',
+            'rate': 7,
+        }, {
+            'id': 2,
+            'name': '一月',
+            'rate': 30,
+        }, {
+            'id': 3,
+            'name': '七七四十九',
+            'rate': 49,
+        }]
+    }
+
+    resp = make_response(jsonify(reply), status_code)
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
+
+
+
 @api_blueprint.route('/device_status', methods=["POST"])
 @check_openid
 def get_device_status():

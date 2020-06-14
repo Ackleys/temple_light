@@ -6,7 +6,7 @@ import React        from 'react';
 import ReactDOM     from 'react-dom';
 
 import {
-	IndexRoute, Redirect, 
+	IndexRoute, Redirect,
 	browserHistory, 
 	Router, Route, Link 
 } from 'react-router';
@@ -18,10 +18,10 @@ if ( window.ENV.production ) {
 		window.URL_PREFIX = "/adminpage";      // http://dw.airm2m.com
 		window.API_PREFIX = '/admin';
 		window.QRcode_url = 'http://server.fzstack.com/'
-} else {
-		window.QRcode_url = 'http://dw.airm2m.com/street_machine/';
-		window.API_PREFIX = "/street_machine/admin"; // http://dw.airm2m.com
-		window.URL_PREFIX = '/street_machine/adminpage';
+} else { 
+		window.QRcode_url = 'http://server.fzstack.com/';
+		window.API_PREFIX = "/admin"; // http://dw.airm2m.com
+		window.URL_PREFIX = '';
 }
 var App = React.createClass({
 	getInitialState: function () {
@@ -59,7 +59,7 @@ var init = function (){
 				}
 			}} path={window.URL_PREFIX+"/"} component={App}>
 				<IndexRoute component={Admin.HomeIndex} />
-			</Route>
+			</Route> 
 			<Route path={window.URL_PREFIX+"/turnover"} component={App}>
 				<IndexRoute component={Admin.TurnOver} />
 			</Route>

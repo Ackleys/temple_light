@@ -148,9 +148,14 @@ const MyLayout = React.createClass({
 					{'title':'sim卡','to':window.URL_PREFIX+'/sim'},
 					{'title':'免费记录','to':window.URL_PREFIX+'/start'},
 				  ]},
-				  {"title":"套餐设置","icon":"bars","children":[
+				  {"title":"设备类型","icon":"bars","children":[
 					{'title':'倒计时类型','to':window.URL_PREFIX+'/chair'},
 					{'title':'投币器类型','to':window.URL_PREFIX+'/doll'},
+					/*
+					{'title':'串口类型','to':window.URL_PREFIX+'/uart'},
+					{'title':'烛灯','to':window.URL_PREFIX+'/doll'},
+					{'title':'烛灯屏显','to':window.URL_PREFIX+'/doll'},
+					*/
 					{'title':'会员套餐','to':window.URL_PREFIX+'/member'},
 				  ]},
 				  {"title":"代理设置","icon":"bank","children":[

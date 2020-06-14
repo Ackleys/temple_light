@@ -5,7 +5,7 @@
 import os
 
 MYSQL_USER = 'root'
-MYSQL_PASSWORD = 'password'
+MYSQL_PASSWORD = 'root'
 MYSQL_IP = '127.0.0.1'
 
 if os.environ.get('production'):

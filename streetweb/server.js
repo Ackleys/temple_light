@@ -31,7 +31,7 @@ app.use(function (req, res, next) {
 app.use("/assets",  express.static("assets"));
 
 var request = function (method, path, headers, body, callback){
-    var proxy_host = "dw.airm2m.com"; // dw.airm2m.com, lottery.dsnminsu.com , 127.0.0.1:9001
+    var proxy_host = "127.0.0.1"; // dw.airm2m.com, lottery.dsnminsu.com , 127.0.0.1:9001
     var proxy_port = 80;
     var handler = function(response) {
         var reply = '';

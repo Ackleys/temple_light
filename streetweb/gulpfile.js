@@ -14,11 +14,17 @@ var assign = require('lodash.assign');
 var watchify   = require('watchify');
 var browserify = require('browserify');
 var babelify   = require('babelify');
+const hmr = require('browserify-hmr');
 
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var es     = require('event-stream');
 
+const connect = require('gulp-connect');
+const history = require('connect-history-api-fallback');
+const { createProxyMiddleware } = require('http-proxy-middleware');
+const url = require('url');
+const runSequence = require('run-sequence');
 
 var ENTRIES = [
     './src/admin.js',
@@ -39,7 +45,9 @@ var BROWSERIFY_CONFIG_WECHAT = {
 var BABEL_OPTIONS = {
     "presets": ['es2015', 'react'],
     "ignore": [/\.\/node_modules\//],
-    "plugins":[["import",{"libraryName":"antd"}]] ,
+    "plugins":[
+        ["import",{"libraryName":"antd"}],
+    ] ,
     "sourceMaps": true,
     "sourceMapsAbsolute": true,
 };
@@ -65,18 +73,6 @@ function reversion(){
     fs.writeFileSync("index.html", template);
 }
 
-//TODO: 不要调用这个函数
-function rename_bundle(){
-    return rename(function (path){
-        //TODO: 下面的代码可能有问题
-        //path.dirname = "";
-        //path.basename += ".bundle";
-        //path.extname = ".js";
-        console.log(path);
-        return path;
-    });
-}
-
 function dev() {
     create_dev_env();
     var jobs = ENTRIES.map(function (entry){
@@ -88,10 +84,16 @@ function dev() {
         return bundle.bundle()
             .on('error', on_error)
             .pipe(source(entry))
-            .pipe(rename_bundle())
             .pipe(buffer())
+            .pipe(rename({
+                dirname: '',
+                suffix: '.bundle',
+            }))
             .pipe(gulp.dest('./assets/js'));
     });
+
+    reversion();
+
     return es.merge.apply(null, jobs);
 }
 function wechat_h5() {
@@ -108,7 +110,7 @@ function wechat_h5() {
 
 function build() {
     DEBUG = false;
-    process.env.NODE_ENV = 'production';
+    process.env.NODE_ENV = 'development';
     create_build_env();
 
     var _bundler = bundler();
@@ -122,9 +124,11 @@ function build() {
         return bundle.bundle()
             .on('error', on_error)
             .pipe(source(entry))
-            //.pipe(rename_bundle()) //这句rename有问题
             .pipe(buffer())
-            .pipe(uglify())
+            .pipe(rename({
+                dirname: '',
+                suffix: '.bundle'
+            }))
             .pipe(gulp.dest('./assets/js'));
     });
 
@@ -144,13 +148,14 @@ function build_r() {
         browserify_config["entries"] = [entry];
 
         var bundle = browserify(BROWSERIFY_CONFIG).transform('babelify', BABEL_OPTIONS);
-
         return bundle.bundle()
             .on('error', on_error)
             .pipe(source(entry))
-            //.pipe(rename_bundle())
             .pipe(buffer())
-            //.pipe(uglify())
+            .pipe(rename({
+                dirname: '',
+                suffix: '.bundle'
+            }))
             .pipe(gulp.dest('./assets/js'));
     });
 
@@ -187,14 +192,69 @@ b.on('update', function(ids) {  //监测文件改动
     gulp.start('watch-w');  //触发打包js任务
   });
 
-gulp.task('dev', dev);
+
+gulp.task('hmr', () => {
+    const b = browserify({
+        ...BROWSERIFY_CONFIG,
+        plugin: [hmr, watchify],
+    }).transform(babelify, BABEL_OPTIONS);
+
+    const bundle = () => {
+        b.bundle()
+            .on('error', err => {
+                console.log(`Browserify Error ${err.message}`);
+            })
+            .pipe(source(ENTRIES[0]))
+            .pipe(buffer())
+            .pipe(sourcemaps.init({loadMaps: true}))
+            .pipe(sourcemaps.write('./maps'))
+            .pipe(rename({
+                dirname: '',
+                suffix: '.bundle'
+            }))
+            .pipe(gulp.dest('./assets/js'));
+    };
+
+    b.on('update', bundle);
+    bundle();
+});
 
 // gulp watch --env=production
 gulp.task('build', build);
-gulp.task('pro', build);
 gulp.task('build-r', build_r);
-gulp.task('watch', ['dev'], function () {
-    gulp.watch('./src/**/*.js', ['dev']);
+
+
+gulp.task('watch', function () {
+    gulp.watch('./src/**/*.*', () => {
+        runSequence('build', 'reload');
+    });
 });
 
-gulp.task('default', ['watch']);
+gulp.task('webserver', () => {
+    connect.server({
+        livereload: true,
+        port: 2333,
+        middleware: (conn, opt) => ([
+            createProxyMiddleware('/admin', {
+                target: 'http://server.fzstack.com',
+                changeOrigin: true,
+            }),
+            createProxyMiddleware('/static', {
+                target: 'http://server.fzstack.com',
+                changeOrigin: true,
+            }),
+            history(),
+        ])
+    });
+});
+
+gulp.task('reload', () => {
+    gulp.src("./src/**/*.*")
+        .pipe(connect.reload());
+});
+
+gulp.task('dev', ['build', 'webserver', 'watch'], () => {
+    console.log('dev')
+});
+
+gulp.task('default', ['dev']);
