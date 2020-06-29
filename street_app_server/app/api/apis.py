@@ -168,6 +168,46 @@ def launch_relay_signal_deivce_v2(imei, duration, device_type=0, high=500, low=4
         return False, json.dumps({'code': 99, 'msg': 'server error'})
 
 
+def launch_uart_deivce_v2(imei, uart_val, uart_exp):
+    dbg((imei, uart_val, uart_exp))
+    imei = imei
+
+    mongodata = {
+        'imei': imei,
+        'datagram_type': 1,
+        'device_type': 2,
+    }
+
+    data = bytearray(f'V#SendCmd,115200|{uart_val}|{uart_exp}#', 'utf8')
+
+
+    dbg(data)
+    try:
+        result = tool.send_data_to_device(
+            's_trans', imei, data, need_to_wait=True)
+        if result and result['result']:
+            mongodata['result'] = 0     # 成功
+            dbapi.insert_datagram(mongodata)
+            return True, json.dumps({'code': 0, 'msg': ''})
+        else:
+            mongodata['result'] = 1     # 设备正在运行
+            dbapi.insert_datagram(mongodata)
+            return False, json.dumps({'code': 8002, 'msg': '设备正在运行'})
+    except error.ApiError as e:
+        if e.error_no == 8001:
+            mongodata['result'] = 2     # 设备连接超时
+            dbapi.insert_datagram(mongodata)
+            return False, json.dumps({'code': 8001, 'msg': '设备连接超时'})
+        else:
+            mongodata['result'] = 3     # server error
+            dbapi.insert_datagram(mongodata)
+            return False, json.dumps({'code': 99, 'msg': 'server error'})
+    except:
+        mongodata['result'] = 3     # server error
+        dbapi.insert_datagram(mongodata)
+        return False, json.dumps({'code': 99, 'msg': 'server error'})
+
+
 def launch_pulse_signal_deivce(imei, pulse, high=50, low=50):
     dbg((imei, pulse, high, low))
     imei = imei

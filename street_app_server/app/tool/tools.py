@@ -109,7 +109,7 @@ def on_message(client, userdata, message):
         dbg(message.payload)
         items = message.topic.split('/')
         dbg(items)
-        if len(items) > 4 and items[4] == "deveventrsp":
+        if len(items) > 4 and items[4] in ("deveventrsp",): # items[4]是topic
             if 'fake_token' in message.topic:
                 return
             global async_event_dict 
@@ -117,7 +117,8 @@ def on_message(client, userdata, message):
             dbg(async_event_dict)
             dbg("receive {0}, topic = {1}".format(message.payload, message.topic))
             try:
-                token = int(items[5])
+                token = int(items[5]) #item[5] 是 greenlet_id
+                print(f"-> token is {token}")
             except ValueError:
                 dbg('value err')
                 return
@@ -128,7 +129,7 @@ def on_message(client, userdata, message):
                 if message.payload[1] == 0x54: # payment notification
                     data = {}
                     # [2] result
-                    data['result'] = message.payload[2]
+                    data['result'] = message.payload[2] #result = 0
                     dbg('%r start set' % async_event_dict[token])
                     if isinstance(async_event_dict[token], AsyncResult):
                         async_event_dict[token].set(data)

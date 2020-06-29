@@ -1005,9 +1005,11 @@ def add_product():
         data = request.get_json()
         title = data['title']
         body = data['body']
-        value = data['value']
+        value = data['value'] if 'value' in data else 0
         cat = data['cat']
         price = data['price']
+        uart_val = data['uart_val'] if 'uart_val' in data else ''
+        uart_exp = data['uart_exp'] if 'uart_exp' in data else ''
     except:
         print_exception_info()
         raise ApiError('add product error', error.ERROR_PARAM)
@@ -1016,7 +1018,7 @@ def add_product():
         raise ApiError('ERROR_INVALIDATE_PRICE', error.ERROR_INVALIDATE_PRICE)
 
     agent_id = current_user.agent_id
-    product = dbapi.make_new_product(agent_id, title, body, value, cat, price)
+    product = dbapi.make_new_product(agent_id, title, body, value, cat, price, uart_val, uart_exp)
     db.session.commit()
 
     return make_response(jsonify(reply), status_code)
@@ -1052,6 +1054,8 @@ def get_products():
                     'body': product.body,
                     'value': product.value,
                     'price': product.price,
+                    'uart_val': product.uart_val,
+                    'uart_exp': product.uart_exp,
                     'inventory': product.inventory
                 }
                 data.append(info)
@@ -1071,6 +1075,8 @@ def get_products():
                     'body': product.body,
                     'value': product.value,
                     'price': product.price,
+                    'uart_val': product.uart_val,
+                    'uart_exp': product.uart_exp,
                     'inventory': product.inventory,
                     'unit': device.product_unit
                 }
@@ -1092,13 +1098,17 @@ def update_product():
         data = request.get_json()
         product_id = data['product_id']
         update = data['update']
-        keys = ('title', 'body', 'value', 'price')
+        keys = ('title', 'body', 'value', 'price', 'uart_val', 'uart_exp')
         for k in update:
             assert(k in keys)
             if 'value' in update:
                 assert(isinstance(update['value'], int) and update['value'] > 0)
             if 'price' in update:
                 assert(isinstance(update['price'], int) and update['price'] > 0)
+            if 'uart_val' in update:
+                assert(isinstance(update['uart_val'], str))
+            if 'uart_exp' in update:
+                assert(isinstance(update['uart_exp'], str))
     except:
         print_exception_info()
         raise ApiError('update product error', error.ERROR_PARAM)

@@ -412,8 +412,8 @@ def update_agent(agent, **kwargs):
 
 
 @catch_except
-def make_new_product(agent_id, title, body, value, cat, price, inventory=99999):
-    product = Product(agent_id, title, body, value, cat, price, inventory)
+def make_new_product(agent_id, title, body, value, cat, price, uart_val, uart_exp, inventory=99999):
+    product = Product(agent_id, title, body, value, cat, price, uart_val, uart_exp, inventory)
     db.session.add(product)
     return product
 
@@ -452,6 +452,12 @@ def update_product(product, **kwargs):
         updated = True
     if 'deleted' in kwargs:
         product.deleted = kwargs['deleted']
+        updated = True
+    if 'uart_val' in kwargs:
+        product.uart_val = kwargs['uart_val']
+        updated = True
+    if 'uart_exp' in kwargs:
+        product.uart_exp = kwargs['uart_exp']
         updated = True
     if updated:
         product.utime = datetime.now()

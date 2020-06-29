@@ -364,6 +364,8 @@ class Product(db.Model):
     value   = db.Column(db.Integer, nullable=False, server_default='0')
     cat     = db.Column(db.Integer, nullable=False, server_default='0')
     price   = db.Column(db.Integer, nullable=False, server_default='1')
+    uart_val = db.Column(db.String(255), nullable=True, server_default='')
+    uart_exp = db.Column(db.String(255), nullable=True, server_default='')
     inventory = db.Column(db.Integer, nullable=False, server_default='99999')
     deleted = db.Column(db.Integer, nullable=False, server_default="0")
 
@@ -372,14 +374,17 @@ class Product(db.Model):
 
     status  = db.Column(db.Integer, nullable=False, server_default="0")
 
-    def __init__(self, agent_id, title, body, value, cat, price, inventory):
+    def __init__(self, agent_id, title, body, value, cat, price, uart_val, uart_exp, inventory):
         self.agent_id = agent_id
         self.title = title
         self.body = body
         self.value = value
         self.cat = cat
         self.price = price
+        self.uart_val = uart_val
+        self.uart_exp = uart_exp
         self.inventory = inventory
+
 
         now = datetime.now()
         self.ctime = now

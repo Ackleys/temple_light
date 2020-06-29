@@ -220,6 +220,14 @@ def chair(agent_id):
     return render_template('massage_chair.html')
 
 
+@main_blueprint.route('/uart/<agent_id>/')
+@oauth_required
+def uart(agent_id):
+    # if 'has_openid' in session:
+    #     session.pop('has_openid')
+    return render_template('massage_uart.html')
+
+
 @main_blueprint.route('/chair_nopay/<agent_id>/')
 @oauth_required
 def chair_nopay(agent_id):

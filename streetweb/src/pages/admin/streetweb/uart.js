@@ -36,7 +36,7 @@ const Uart = React.createClass({
             }
         };
         let data = {
-            cat:0
+            cat:2
         }
         var xhr  = new XMLHttpRequest();
         xhr.open("POST", url);
@@ -66,7 +66,7 @@ const Uart = React.createClass({
             }
         }else{
               data = da;
-              data.cat=0;
+              data.cat=2;
               data.body = '';
               let arr = Object.keys(data);
               if(arr.length<5){
@@ -80,18 +80,9 @@ const Uart = React.createClass({
             self.setState({errormsg:"非法的金额"});
             return false;
         }
-        if(da.price === undefined&&da.value === undefined){
-
-        }else if (isNaN(da.price-0)){
-            self.setState({errormsg:"不可填入非数字"});
+        if(da.price !== undefined && isNaN(da.price-0)){
+            self.setState({errormsg:"价格不可填入非数字"});
             return false;
-        }else if (isNaN(da.price-0)){
-            if(da.price=== undefined){
-
-            }else{
-                self.setState({errormsg:"不可填入非数字"});
-                return false;
-            }
         }
         self.setState({loading:true});
         var callback = function(err,res){
@@ -139,21 +130,17 @@ const Uart = React.createClass({
     inputChange:function(type,e){
         if(type === 'title'){
             this.state.data.title = e.target.value;
-            ///this.setState({title:e.target.value});
         }else if(type === 'body'){
             this.state.data.body = e.target.value;
-            //this.setState({body:e.target.value});
         }
         else if(type === 'price'){
-            this.state.data.price = e.target.value*100;
-            //this.setState({price:e.target.value});
+            this.state.data.price = +e.target.value * 100;
         }
-        else if(type === 'value'){
-            this.state.data.value = e.target.value;
-            //this.setState({value:e.target.value});
+        else if(type === 'uart_val'){
+            this.state.data.uart_val = e.target.value;
         }
-        else if(type === 'expectedValue') {
-            this.state.data.expectedValue = e.target.value;
+        else if(type === 'uart_exp') {
+            this.state.data.uart_exp = e.target.value;
         }
         console.log(this.state.data);
     },
@@ -200,19 +187,22 @@ const Uart = React.createClass({
     render: function (){
         let self = this;
         let alerts = null;
-        let price = '',value = '', expectedValue = '';
+        let price = '',uart_val = '', uart_exp = '';
         if(self.state.ddata.price){
             price=self.state.ddata.price/100;
         }
-        if(self.state.ddata.value){
-            value = self.state.ddata.value;
+        if(self.state.ddata.uart_val){
+            uart_val = self.state.ddata.uart_val;
+        }
+        if(self.state.ddata.uart_exp){
+            uart_exp = self.state.ddata.uart_exp;
         }
         const product = self.state.product.map((q,i)=>{
             return (
                 <div key={i} className='product_box chair_box' >
                   <span>
                     <p>{q.price/100}元</p>
-                    <p>数据: {q.value}</p>
+                    <p>数据: {q.uart_val}</p>
                   </span>
                   <span>
                     <p>{q.title}</p>
@@ -251,8 +241,8 @@ const Uart = React.createClass({
                     <Input defaultValue={self.state.ddata.title} placeholder='商品名' onChange={self.inputChange.bind(self,'title')} />
                     {/*<Input placeholder='请输入套餐描述，例如：放松一下' onChange={self.inputChange.bind(self,'body')} />*/}
                     <Input defaultValue={price} placeholder='默认价格（单位元）' onChange={self.inputChange.bind(self,'price')} />
-                    <Input defaultValue={value} placeholder='发送的数据' onChange={self.inputChange.bind(self,'value')} />
-                    <Input defaultValue={expectedValue} placeholder='期望接收的数据' onChange={self.inputChange.bind(self,'expectedValue')} />
+                    <Input defaultValue={uart_val} placeholder='发送的数据' onChange={self.inputChange.bind(self,'uart_val')} />
+                    <Input defaultValue={uart_exp} placeholder='期望接收的数据' onChange={self.inputChange.bind(self,'uart_exp')} />
                     {alerts}
                 </Modal>
             </MyLayout>

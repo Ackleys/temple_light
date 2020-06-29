@@ -573,6 +573,8 @@ def machine_start():
             # 退款
             pay_refund(pay, product)
             raise ApiError('ERROR_PAY_TOO_FREQUENCE', error.ERROR_PAY_TOO_FREQUENCE)
+    
+    
 
     dbg('cat: %s' % cat)
     device = dbapi.get_device(imei=imei)
@@ -590,9 +592,12 @@ def machine_start():
     dbg('imei: %s, value: %d, cat: %d, high: %d, low: %d' % (imei, value, cat, low, high))
 
     cat = product.cat
-    if cat in (0, 2, 3):
+    if cat in (0,):
         device_type = device.cat
         succ, result = launch_relay_signal_deivce_v2(imei, value, device_type)
+    if cat in (2,):
+        print('sending uart message..')
+        succ, result = launch_uart_deivce_v2(imei, product.uart_val, product.uart_exp)
 
     elif cat == 1:
         if imei == '868575023189139' and value == 3:

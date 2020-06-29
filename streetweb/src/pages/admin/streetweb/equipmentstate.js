@@ -88,6 +88,10 @@ var Edit = React.createClass({
 			browserHistory.push(window.URL_PREFIX+'/doll');
 			sessionStorage.setItem('key',3);
 			sessionStorage.setItem('subkey','3_1');
+		}else if(self.state.defaultcat === '串口'){
+			browserHistory.push(window.URL_PREFIX+'/uart');
+			sessionStorage.setItem('key',3);
+			sessionStorage.setItem('subkey','3_2');
 		}
 	},
 	radioChange:function(e){
@@ -627,7 +631,7 @@ const EquipmentState = React.createClass({
 					a = q.value;
 				}
 		})
-		if(t>1){
+		if(t>3){
 			a = '倒计时';
 		}
 		return a;
@@ -887,6 +891,9 @@ const EquipmentState = React.createClass({
 			}else{
 				url = window.QRcode_url+'doll/'+re.owner_agent_id+'/?imei='+re.imei;
 			}
+		}else if(re.cats === '串口'){
+			url = window.QRcode_url+'uart/'+re.owner_agent_id+'/?imei='+re.imei;
+			
 		}
 		this.setState({visible:true,url:url,title:'二维码'},function(){
 			let id = re.id+'';

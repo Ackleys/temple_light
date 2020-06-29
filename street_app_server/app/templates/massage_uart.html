@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" 
+    content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name = "format-detection" content = "telephone=no">
+	<title> </title>
+	<script src="{{ url_for('static',filename='js/layer.js') }}"></script>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='js/need/layer.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/weui.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/jquery-weui.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/swiper-4.1.0.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/index.css') }}?v=2.36">
+	<script src="{{ url_for('static',filename='js/rem.js') }}"></script>
+	<script type="text/javascript">
+		$SCRIPT_ROOT={{request.script_root|tojson|safe}};
+		
+	</script>
+</head>
+<body>
+	<div class='head'>
+		<img class='user' src="{{ url_for('static',filename='img/user.png') }}"/>
+		<div class='icons'>
+			<span></span>
+			<span id = 'balance'></span>
+			
+		</div>
+		<div class = 'right'>
+			<p id = 'title'> </p>
+			<span id='state'></span>
+		</div>
+	</div>
+	<div class='center'>
+		<h4>请选择套餐</h4>
+		<div class = 'b_border flex_box'>
+			
+		</div>
+	</div>
+	<div class = 'chair_footer'>
+		<p id = 'chair_money'>本次支付：</p>
+		<button id='chair_pay'>现在支付</button>
+		<button id='stop'>停止</button>
+	</div>
+	<!--<div class="spinner" id = 'spinner' >
+		 <div class="spinner-container container1">
+			    <div class="circle1"></div>
+			    <div class="circle2"></div>
+			    <div class="circle3"></div>
+			    <div class="circle4"></div>
+		</div>
+		<div class="spinner-container container2">
+			    <div class="circle1"></div>
+			    <div class="circle2"></div>
+			    <div class="circle3"></div>
+			    <div class="circle4"></div>
+		</div>
+		<div class="spinner-container container3">
+			    <div class="circle1"></div>
+			    <div class="circle2"></div>
+			    <div class="circle3"></div>
+			    <div class="circle4"></div>
+		</div> 
+		<p>请稍等，正在启动</p>-->
+	</div>
+	<form id='myform' method="POST" action="https://openapi.alipay.com/gateway.do"></form>
+	<div class="swiper-container">
+	    <div class="swiper-wrapper">
+
+	    </div>
+	    <!-- 如果需要分页器 -->
+	    <div class="swiper-pagination"></div>
+	</div>
+	<script src="{{ url_for('static',filename='js/jquery-2.2.3.min.js') }}"></script>
+	<script src="{{ url_for('static',filename='js/swiper-4.1.0.min.js') }}"></script>
+	<script src="{{ url_for('static',filename='js/myswiper.js') }}?v=1.11"></script>
+</body>
+	<script src="{{ url_for('static',filename='js/jquery-weui.min.js') }}?v=1"></script>
+	<script type="text/javascript" async src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	<script src="{{ url_for('static',filename='js/uart.js') }}?v=15.82"></script>
+</html>

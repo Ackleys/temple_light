@@ -53,10 +53,16 @@ const EditEquipment = React.createClass({
 		        this.product(0,re.id);
 		        let time_ = ['断电恢复后，不运行','','断电恢复后，继续运行','断电后继续计时，恢复后根据剩余时间决定是否继续运行'][re.cat];
 		        this.setState({type:0,time_type:time_});
-		    }else{
+		    }else if(re.cats === '投币器') {
 		        this.product(1,re.id);
 		        this.setState({type:1});
-		    }
+		    }else if(re.cats === '串口') {
+					this.product(2,re.id);
+					this.setState({type:2});
+				}else if(re.cats === '烛灯1.0') {
+					this.product(3,re.id);
+					this.setState({type:3});
+				}
 			if(re.nopay>=1){
 				num = 1;
 			}else{
@@ -240,18 +246,10 @@ const EditEquipment = React.createClass({
 		let type = this.state.type-0;
 		console.log(values);
 		this.setState({errormsg:null});
-		if(type === 0){
-			if(values.length<=6){
-				this.setState({values:values});
-			}else{
-				this.setState({errormsg:'该设备类型最多选择6种套餐'});
-			}
-		}else if(type === 1){
-			if(values.length<=6){
-				this.setState({values:values});
-			}else{
-				this.setState({errormsg:'该设备类型最多选择6种套餐'});
-			}
+		if(values.length<=6){
+			this.setState({values:values});
+		}else{
+			this.setState({errormsg:'该设备类型最多选择6种套餐'});
 		}
 	},
 	show_setting:function(){
@@ -321,10 +319,28 @@ const EditEquipment = React.createClass({
 	        	address_id:self.state.address-0,
 	        	product_list:self.state.values,
 	        	remark:self.state.remark,
-	        	nopay:self.state.nopay,
+	        	nopay:self.state.nopay-0,
 	        	coupon:self.state.coupon
 	        }
-        }
+        }else if(self.state.defaultcat === '串口') {
+					update = {
+	        	cat:self.state.type-0,
+	        	address_id:self.state.address-0,
+	        	product_list:self.state.values,
+	        	remark:self.state.remark,
+	        	nopay:self.state.nopay-0,
+	        	coupon:self.state.coupon
+	        }
+				}else if(self.state.defaultcat === '烛灯1.0') {
+					update = {
+	        	cat:self.state.type-0,
+	        	address_id:self.state.address-0,
+	        	product_list:self.state.values,
+	        	remark:self.state.remark,
+	        	nopay:self.state.nopay-0,
+	        	coupon:self.state.coupon
+	        }
+				}
         console.log(update);
         if(self.state.pulse_width>255){
         	self.setState({errormsg:'脉冲周期和间隔不可大于255'});
@@ -414,6 +430,10 @@ const EditEquipment = React.createClass({
 			browserHistory.push(window.URL_PREFIX+'/doll');
 			sessionStorage.setItem('key',3);
 			sessionStorage.setItem('subkey','3_1');
+		}else if(self.state.defaultcat === '串口'){
+			browserHistory.push(window.URL_PREFIX+'/uart');
+			sessionStorage.setItem('key',3);
+			sessionStorage.setItem('subkey','3_2');
 		}
 	},
 	radioChange:function(e){
@@ -545,9 +565,9 @@ const EditEquipment = React.createClass({
                     </TabPane>
                     <TabPane tab="套餐及备注" key="套餐及备注">
                         <p style={{fontSize:16,margin:'20px 0'}}>备注：</p>
-						<Input defaultValue={self.state.remark} placeholder='请输入备注' style={{width:'60%',marginRight:'6%',height:40}} onChange={self.inputchange.bind(self,'remark')}/>
-						<p style={{fontSize:16,margin:'20px 0'}}>为所选设备配备套餐：</p>
-						{check}
+												<Input defaultValue={self.state.remark} placeholder='请输入备注' style={{width:'60%',marginRight:'6%',height:40}} onChange={self.inputchange.bind(self,'remark')}/>
+												<p style={{fontSize:16,margin:'20px 0'}}>为所选设备配备套餐：</p>
+												{check}
                     </TabPane>
                     <TabPane tab="高级设置" key="高级设置">
                         {setting}

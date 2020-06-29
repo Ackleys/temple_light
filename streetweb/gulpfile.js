@@ -236,11 +236,11 @@ gulp.task('webserver', () => {
         port: 2333,
         middleware: (conn, opt) => ([
             createProxyMiddleware('/admin', {
-                target: 'http://127.0.0.1:5000',
+                target: 'http://server.fzstack.com',
                 changeOrigin: true,
             }),
             createProxyMiddleware('/static', {
-                target: 'http://127.0.0.1:5000',
+                target: 'http://server.fzstack.com',
                 changeOrigin: true,
             }),
             history(),
