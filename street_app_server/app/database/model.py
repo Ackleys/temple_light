@@ -8,9 +8,10 @@ from datetime import datetime, timedelta
 # from sqlalchemy import Column, Integer, String, DateTime, Text
 
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask.ext.login import UserMixin
+from flask_login import UserMixin
 
 from sqlalchemy.sql import func
+from sqlalchemy.orm import relationship, backref
 
 from app import db, lm
 from config import config
@@ -799,6 +800,9 @@ class DeviceProduct(db.Model):
 
     status      = db.Column(db.Integer, nullable=False, server_default="0")
 
+    device = relationship('Device', backref=backref('link', uselist=False))
+    product = relationship('Product', backref=backref('link', uselist=False))
+
     def __init__(self, device_id, product_id):
         self.device_id = device_id
         self.product_id = product_id
@@ -1549,3 +1553,73 @@ class CouponReceipt(db.Model):
     def __repr__(self):
         return '<CouponReceipt: %r>' % self.code
 
+class Temple(db.Model):
+    __tablename__ = 'temple'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), nullable=False, server_default="")
+    image = db.Column(db.String(128), nullable=False)
+    halls = relationship('Hall', backref='temple')
+    orders = relationship('TempleOrder', backref='temple', order_by='TempleOrder.ctime')
+
+    
+
+class Hall(db.Model):
+    __tablename__ = 'hall'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(128), nullable=False, server_default="")
+    temple_id = db.Column(db.ForeignKey('temple.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
+    device_id = db.Column(db.ForeignKey('device.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
+
+    durations = relationship('Duration', backref='hall')
+    lights = relationship('Light', backref='hall')
+    device = relationship('Device', backref=backref('hall', uselist=False))
+
+
+class Light(db.Model):
+    __tablename__ = 'light'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), nullable=False, server_default="")
+    price = db.Column(db.Float, nullable=False)
+    image = db.Column(db.String(128), nullable=False)
+    hall_id = db.Column(db.ForeignKey('hall.id', ondelete='CASCADE', onupdate='CASCADE'))
+    
+
+class Duration(db.Model):
+    __tablename__ = 'duration'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(32), nullable=False)
+    duration = db.Column(db.Float, nullable=False)
+    hall_id = db.Column(db.ForeignKey('hall.id', ondelete='CASCADE', onupdate='CASCADE'))
+
+class TempleOrder(db.Model):
+    __tablename__ = 'temple_order'
+
+    id = db.Column(db.Integer, primary_key=True)
+    customer = db.Column(db.String(64), nullable=False)
+    sex = db.Column(db.Enum('F', 'M'), nullable=False)
+    telephone = db.Column(db.String(32), nullable=True)
+    desire = db.Column(db.String(255), nullable=False)
+    ctime = db.Column(db.DateTime, nullable=False, default=datetime.now())
+
+    record_id = db.Column(db.ForeignKey('record.id', ondelete='CASCADE', onupdate='CASCADE'))
+    duration_id = db.Column(db.ForeignKey('duration.id', ondelete='CASCADE', onupdate='CASCADE'))
+    temple_id = db.Column(db.ForeignKey('temple.id', ondelete='CASCADE', onupdate='CASCADE'))
+
+    items = relationship('OrderItem', backref='templeOrder')
+    record = relationship('Record', backref=backref('templeOrder', uselist=False))
+
+
+class OrderItem(db.Model):
+    __tablename__ = 'order_item'
+
+    id = db.Column(db.Integer, primary_key=True)
+    num = db.Column(db.Integer, nullable=False)
+
+    temple_order_id = db.Column(db.ForeignKey('temple_order.id', ondelete='CASCADE', onupdate='CASCADE'))
+    light_id = db.Column(db.ForeignKey('light.id', ondelete='CASCADE', onupdate='CASCADE'))
+
+    light = relationship('Light', backref=backref('orderItem', uselist=False))

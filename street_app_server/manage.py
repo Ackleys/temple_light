@@ -3,7 +3,7 @@
 
 import os
 
-from flask.ext.script import Manager, Shell
+from flask_script import Manager, Shell
 import sqlalchemy
 
 from config import config

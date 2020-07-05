@@ -17,8 +17,8 @@ from flask import Flask, request, session, jsonify, current_app, g
 from flask import redirect, url_for, render_template, make_response
 
 # flask-login
-from flask.ext.login import login_user, logout_user, current_user
-from flask.ext.login import login_required, LoginManager
+from flask_login import login_user, logout_user, current_user
+from flask_login import login_required, LoginManager
 
 # db
 from app import db
@@ -48,6 +48,16 @@ import app.third_party.wechatpay as wechatpay
 # blueprint
 from . import api_blueprint
 
+import os
+
+from flask_expects_json import expects_json
+from werkzeug.exceptions import BadRequest
+from urllib.parse import quote
+
+from flask_jwt import JWT, jwt_required, current_identity
+from werkzeug.security import safe_str_cmp
+
+from app.database.model import Duration, Hall, Light
 
 @api_blueprint.errorhandler(ApiError)
 def handle_api_error(current_error):
@@ -1408,3 +1418,285 @@ def ali_notify():
 #     dbapi.db.session.commit()
 
 #     return make_response(jsonify(reply), status_code)
+
+
+
+@api_blueprint.errorhandler(BadRequest)
+def handle_bad_request(err):
+    return err.get_response()
+
+
+def openid_required(func):
+    def wrapper(*args, **kwargs):
+        try:
+            g.openid = request.headers['authorization']
+            wechat_user = dbapi.get_wechat_user(openid=g.openid)
+            if not wechat_user:
+                raise ApiError('do not login', error.ERROR_NO_LOGIN)
+            g.wechat_user = wechat_user
+            g.oauth_user = wechat_user
+        except:
+            raise ApiError('ERROR_NO_LOGIN', error.ERROR_NO_LOGIN)  
+        return func(*args, **kwargs)
+    return wrapper
+
+
+global_defs = {
+    'definitions': {
+        'imei': {
+            'type': 'integer',
+            'minimum': 100000000000000,
+            'maximum': 999999999999999,
+        },
+        'url': {
+            'pattern': r'^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$',
+        }
+    }
+}
+
+
+
+@api_blueprint.route('/v2/user' ,methods=["GET"])
+@expects_json({
+    'type': 'object',
+    'properties': {
+        'type': {'enum': ['code', 'openid']},
+        'imei': {'$ref': '#/definitions/imei'},
+    },
+    'required': ['imei', 'type'],
+    'anyOf': [
+        {
+            'properties': {
+                'type': {'enum': ['code']},
+                'next_url': {'$ref': '#/definitions/url'},
+            },
+            'required': ['next_url'],
+            'maxProperties': 3,
+        },
+        {
+            'properties': {
+                'type': {'enum': ['openid']},
+                'code': {'type': 'string'},
+            },
+            'required': ['code'],
+            'maxProperties': 3,
+        },
+    ],
+    **global_defs,
+}) 
+def v2_user():
+    # 前端判断jwt里是否有openid
+    # 0111WHv92Ld0mM0nyQv92dOEv921WHvR
+    reply ,status_code = {'code': 0}, 200
+    device = dbapi.get_device(imei=g.data['imei'])
+    wechat_config = dbapi.get_wechat_config(agent_id=device.agent_id)
+
+    if g.data['type'] == 'code':
+        reply['data'] = {
+            'url': wechatsdk.gen_auth_url(wechat_config.appid, quote(g.data['next_url']), '')
+        }
+    elif g.data['type'] == 'openid':
+
+        print('openid')
+
+        succ, res = wechatsdk.get_auth_user_info(
+            wechat_config.appid, 
+            wechat_config.appsecret, 
+            g.data['code']
+        )
+        # {'openid': 'ogy6jxJ_eKR7zJfockfTC1-ZLgwk', 'nickname': 'Tapio', 'sex': 1, 'language': 'zh_CN', 'city': '', 'province': '', 'country': '安道尔', 'headimgurl': 'http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTIMibbUV6ehdupkKlkczjXFD1NclAfmlXed0BroOibeXkmeAZZhWmm8sgXQja0x1Nb0WibqdgCQVQzQw/132', 'privilege': []}
+        if not succ:
+            ApiError('ERROR_USER_CANNOT_LOGIN', error.ERROR_USER_CANNOT_LOGIN)
+
+        print(res)
+
+        wechat_user = dbapi.get_wechat_user(openid=res['openid'])
+        if not wechat_user:
+            user = dbapi.make_new_user(wechat_body=res)
+            db.session.commit()
+
+            user_info['user_id'] = user.id
+            user_info['admin_uid'] = 0
+            wechat_user = dbapi.make_new_wechat_user(res)
+            db.session.commit()
+        else:
+            user = dbapi.get_user(user_id=wechat_user.user_id)
+            if user.nickname == "":
+                wechat_user = dbapi.update_wechat_user(wechat_user, wechat_body=user_info)
+                user = dbapi.update_user(user, wechat_body=user_info)
+                db.session.commit()
+
+        reply['data'] = {
+            'openid': res['openid'],
+            
+        }
+
+    else:
+        assert(False)
+
+    #方案1: 直接url填写后端url，后端获取到openid再302跳转到前端
+
+    #方案2: 直接url填写前端url，前端再次调用后端api，后端返回openid
+
+    resp = make_response(jsonify(reply), status_code)
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
+
+
+@api_blueprint.route('/v2/temple',  methods=["GET"])
+@expects_json({
+    'type': 'object',
+    'properties': {
+        'imei': {'$ref': '#/definitions/imei'}
+    },
+    'required': ['imei'],
+    **global_defs,
+})
+def v2_temple():
+    print('GET temple')
+    reply ,status_code = {'code': 0}, 200
+    device = dbapi.get_device(imei=g.data['imei'])
+    temple = device.hall.temple
+
+    reply['data'] = {
+        'name': temple.name,
+        'img': os.path.join(config.V2_IMG_URL, temple.image),
+        'halls': [{
+            'id': hall.id,
+            'name': hall.name,
+            'lights': [{
+                'id': light.id,
+                'name': light.name,
+                'price': light.price,
+                'img': os.path.join(config.V2_IMG_URL, light.image),
+            } for light in hall.lights],
+            'durations': [{
+                'id': duration.id,
+                'name': duration.name,
+                'rate': duration.duration,
+            } for duration in hall.durations],
+            **({'current': True} if device.hall == hall else {}),
+        } for hall in temple.halls],
+        'recents': [{
+            'customer': order.customer,
+            'lights': [item.light.name for item in order.items],
+            **({'hall': order.items[0].light.hall.name} if len(order.items) > 0 else {}),
+        } for order in temple.orders[:5]]
+    }
+
+    resp = make_response(jsonify(reply), status_code)
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
+
+@api_blueprint.route('/v2/order',  methods=["POST"])
+@expects_json({
+    'type': 'object',
+    'properties': {
+        'customer': {
+            'type': 'object',
+            'properties': {
+                'name': {
+                    'type': 'string',
+                    'minLength': 1,
+                    'maxLength': 64,
+                },
+                'sex': {
+                    'type': 'string',
+                    'enum': ['F', 'M'],
+                },
+                'desire': {
+                    'type': 'string',
+                    'maxLength': 255,
+                },
+                'phone': {
+                    'type': ['string', 'null'],
+                    'pattern': r'^1[3-9]\d{9}$',
+                    'default': None,
+                }
+            },
+            'required': ['name', 'sex', 'desire'],
+        },
+        'hall': {
+            'type': 'object',
+            'properties': {
+                'id': {'type': 'integer'},
+            },
+            'required': ['id'],
+        },
+        'duration': {
+            'type': 'object',
+            'properties': {
+                'id': {'type': 'integer'},
+            },
+            'required': ['id'],
+        },
+        'lights': {
+            'type': 'array',
+            'items': {
+                'type': 'object',
+                'properties': {
+                    'id': {'type': 'integer'},
+                    'num': {
+                        'type': 'integer',
+                        'minimum': 1,
+                        'default': 1,
+                    },
+                },
+                'required': ['id'],
+            },
+            'minItems': 1,
+        },
+    },
+    'required': ['customer', 'duration', 'lights'],
+    **global_defs,
+}, fill_defaults=True)
+@openid_required
+def v2_order():
+    dbg('POST order')
+    reply ,status_code = {'code': 0}, 200
+
+    hall = Hall.query.get(g.data['hall']['id'])
+    duration = Duration.query.get(g.data['duration']['id'])
+    if duration not in hall.durations:
+        raise ApiError('ERROR_DEVICE_NOT_FOUND', error.ERROR_DEVICE_NOT_FOUND)
+
+    lights = [{
+        'num': light['num'],
+        'obj': Light.query.get(light['id']),
+    } for light in g.data['lights']]
+    if(any([light['obj'] not in hall.lights for light in lights])):
+        raise ApiError('ERROR_DEVICE_NOT_FOUND', error.ERROR_DEVICE_NOT_FOUND)
+
+    total = duration.duration * sum([light['obj'].price * light['num'] for light in lights])
+    print('total price:', total)
+
+    device = hall.device
+
+    data = wechat_make_new_pay(
+        device.link.product,
+        f'1{datetime.now().strftime("%Y%m%d%H%M%S")}{f"{dbapi.get_max_pay_id()}"[-4:]}', 
+        device.owner_agent_id, 
+        g.oauth_user.user_id,
+        device.imei, 
+        'JSAPI',
+        openid=g.oauth_user.openid,
+        price=total * 100
+    )
+
+    # 前端 -> /v2/api/pay
+    # 后端 <- pay_request
+    # 前端 -> WeixinJSBridge.invoke('getBrandWCPayRequest')
+
+
+
+    reply['data'] = data
+
+
+    resp = make_response(jsonify(reply), status_code)
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
+
+
+@api_blueprint.route('/v2/collection', methods=["GET"])
+def collection_v2():
+    return redirect('https://www.getpostman.com/collections/6d8bd74c6cca144a2811')

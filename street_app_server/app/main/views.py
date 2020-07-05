@@ -16,8 +16,8 @@ from flask import Flask, request, session, jsonify, send_from_directory
 from flask import redirect, url_for, render_template, make_response
 
 # flask-login
-from flask.ext.login import login_user, logout_user, current_user
-from flask.ext.login import login_required, LoginManager
+from flask_login import login_user, logout_user, current_user
+from flask_login import login_required, LoginManager
 
 # db
 from app import db

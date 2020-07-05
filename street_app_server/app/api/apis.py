@@ -399,14 +399,23 @@ def make_receipt(agent, fee, remark, cat):
 
 
 
-def wechat_make_new_pay(product, trade_no, agent_id, user_id, imei, trade_type):
+def wechat_make_new_pay(product, trade_no, agent_id, user_id, imei, trade_type, *, openid=None, price=None, title=None):
+    if title is None:
+        title = product.title
+
+    if price is None:
+        price = product.price
+
+    if openid is None:
+        openid = session['openid']
+
     params = {
-        'body': product.title,
+        'body': title,
         'out_trade_no': trade_no,
-        'total_fee': product.price,
+        'total_fee': price,
         'spbill_create_ip': current_app.config['SELF_IP'],
         'notify_url': current_app.config['NOTIFY_URL'],
-        'openid': session['openid'],
+        'openid': openid,
         'trade_type': trade_type,
         'agent_id': agent_id
     }
@@ -426,7 +435,7 @@ def wechat_make_new_pay(product, trade_no, agent_id, user_id, imei, trade_type):
             #     if last_product and datetime.now().timestamp() - last_pay.ctime.timestamp() <= last_product.value:
             #         raise ApiError('ERROR_PAY_TOO_FREQUENCE', error.ERROR_PAY_TOO_FREQUENCE)
         pay = dbapi.make_new_pay(user_id, product.agent_id, imei, trade_no,
-            product.id, product.title, body, product.cat, product.price, 
+            product.id, title, body, product.cat, price, 
             prepay_id=prepay_id)
         try:
             db.session.commit()

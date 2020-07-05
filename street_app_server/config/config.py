@@ -13,6 +13,8 @@ USER_MYSQL_URI = 'mysql+mysqlconnector://%s:%s@%s/CWS_APP' % (MYSQL_USER, MYSQL_
 ASSETS_PATH = '/root/projects/fw-share/streetweb/assets'
 ADMINPAGE_PATH = '/root/projects/fw-share/streetweb'
 
+V2_IMG_URL = '/static/img/v2'
+
 from .wechat_config import *
 from .ali_config import *
 

@@ -12,6 +12,7 @@ from pymongo import MongoClient
 from config import config
 
 from flask_session import Session
+
 session = Session()
 
 # 使用127.0.0.1:27017 作为mongodb数据库的地址
@@ -36,7 +37,6 @@ def create_app(config_name):
 
     db.init_app(app)
     lm.init_app(app)
-
     # celery
     celery.conf.update(app.config)    # 更新 celery 的配置
 
