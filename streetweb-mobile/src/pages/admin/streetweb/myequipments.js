@@ -9,7 +9,7 @@ import {MyLayout}     from '../common/layout.js';
 import { browserHistory} from 'react-router';
 const Search = Input.Search;
 String.prototype.times = function(n) { return (new Array(n+1)).join(this);}; 
-const MyEquipments = React.createClass({
+const MyEquipments = require('create-react-class')({
 
 	getInitialState: function() {
 		return {

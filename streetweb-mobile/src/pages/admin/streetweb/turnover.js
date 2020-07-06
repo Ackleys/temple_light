@@ -43,7 +43,7 @@ const columns = [ {
             }];
 
 
-var TurnOver = React.createClass({
+var TurnOver = require('create-react-class')({
   getInitialState: function() {
      return{
         "records":[],

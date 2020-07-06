@@ -5,7 +5,7 @@ import ReactDOM     from 'react-dom';
 
 import {Link}       from 'react-router';
 
-const Errors = React.createClass({
+const Errors = require('create-react-class')({
   getInitialState: function() {
     return{}
        

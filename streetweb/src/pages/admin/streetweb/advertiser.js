@@ -2,13 +2,14 @@
 
 import React        from 'react';
 import ReactDOM     from 'react-dom';
-import {  Button, Menu,  Icon, Modal,Input,Table,Form ,Radio,Select,message,Alert} from 'antd';
+import { Form, Icon } from '@ant-design/compatible';
+import {  Button, Menu, Modal,Input,Table ,Radio,Select,message,Alert} from 'antd';
 import {MyLayout}     from '../common/layout.js';
 import List      from './ad_list.js';
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 const { Option, OptGroup } = Select;
-var Advertiser = React.createClass({
+var Advertiser = require('create-react-class')({
 	getInitialState: function() {
 		return{
 			records:[],

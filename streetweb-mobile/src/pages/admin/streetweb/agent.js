@@ -2,14 +2,15 @@
 
 import React        from 'react';
 import ReactDOM     from 'react-dom';
-import {  Button, Menu,  Icon, Modal,Input,Table,Form ,Radio,Select,message,Alert} from 'antd';
+import { Form, Icon } from '@ant-design/compatible';
+import {  Button, Menu, Modal,Input,Table,Radio,Select,message,Alert} from 'antd';
 import {MyLayout}     from '../common/layout.js';
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 const InputGroup = Input.Group;
 const { Option, OptGroup } = Select;
 const Search = Input.Search;
-var Agent = React.createClass({
+var Agent = require('create-react-class')({
 	getInitialState: function() {
 		return{
 			records:[],

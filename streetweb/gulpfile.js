@@ -47,6 +47,14 @@ var BABEL_OPTIONS = {
     "ignore": [/\.\/node_modules\//],
     "plugins":[
         ["import",{"libraryName":"antd"}],
+        ['module-resolver', {
+            root: ['./src/'],
+            alias: {
+                '@': '.',
+                '@admin': './src/pages/admin',
+                '@common': './src/pages/admin/common',
+            }
+        }],
     ] ,
     "sourceMaps": true,
     "sourceMapsAbsolute": true,

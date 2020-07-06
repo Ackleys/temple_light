@@ -26,7 +26,7 @@ function accAdd(arg1,arg2){
     m=Math.pow(10,Math.max(r1,r2))
     return (arg1*m+arg2*m)/m
 }
-const Group = React.createClass({
+const Group = require('create-react-class')({
     getInitialState: function() {
         return {
             loading:true,

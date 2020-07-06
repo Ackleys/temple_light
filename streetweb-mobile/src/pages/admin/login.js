@@ -5,7 +5,8 @@ import ReactDOM     from 'react-dom';
 
 import { browserHistory} from 'react-router';
 //import { Alert, Form, Icon, Input, Button, Checkbox } from 'antd';
-import { Button, InputItem, List, Toast, WingBlank, WhiteSpace, NavBar, Icon } from 'antd-mobile';
+import { Icon } from '@ant-design/compatible';
+import { Button, InputItem, List, Toast, WingBlank, WhiteSpace, NavBar } from 'antd-mobile';
 
 import { createForm } from 'rc-form';
 //const FormItem = Form.Item;

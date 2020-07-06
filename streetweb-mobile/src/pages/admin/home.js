@@ -8,7 +8,7 @@ import {List, WhiteSpace} from 'antd-mobile';
 const Item = List.Item;
 const Brief = Item.Brief;
 
-const HomeIndex = React.createClass({
+const HomeIndex = require('create-react-class')({
 	getInitialState: function() {
 	  return{
 		  data: [],

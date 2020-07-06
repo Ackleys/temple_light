@@ -23,7 +23,7 @@ if ( window.ENV.production ) {
 		window.API_PREFIX = "/street_machine/admin"; // http://dw.airm2m.com
 		window.URL_PREFIX = '/street_machine/adminpage';
 }
-var App = React.createClass({
+var App = require('create-react-class')({
 	getInitialState: function () {
 		return null;
 	},

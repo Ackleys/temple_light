@@ -7,7 +7,7 @@ import { Layout, Button, Menu, Breadcrumb, Icon , Dropdown, Modal, Modalm, Alert
 const { Header, Content, Footer, Sider } = Layout;
 //const SubMenu = Menu.SubMenu;
 const { SubMenu } = Menu;
-const MyLayout = React.createClass({
+const MyLayout = require('create-react-class')({
 	getInitialState: function() {
 		return {
 		  //"meg_num":0,

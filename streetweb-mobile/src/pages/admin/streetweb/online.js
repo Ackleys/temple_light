@@ -41,7 +41,7 @@ const columns = [{
 				title: '用户',
 				dataIndex: 'username', 
 			}];
-var OnLine = React.createClass({
+var OnLine = require('create-react-class')({
 	getInitialState: function() {
 	   return{
 		  "records":[],

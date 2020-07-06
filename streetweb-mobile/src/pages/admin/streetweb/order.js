@@ -14,7 +14,7 @@ const Option = Select.Option;
 const dateFormat = 'YYYY-MM-DD HH:mm:ss';
 
 
-var Order = React.createClass({
+var Order = require('create-react-class')({
 
 	getInitialState: function() {
 	   return{

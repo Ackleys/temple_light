@@ -2,13 +2,14 @@
 
 import React        from 'react';
 import ReactDOM     from 'react-dom';
-import {  Button, Menu,  Icon, Modal,Input,Table,Form ,Radio,Select,message,Alert,Tree,Card } from 'antd';
+import { Form, Icon } from '@ant-design/compatible';
+import {  Button, Menu, Modal,Input,Table ,Radio,Select,message,Alert,Tree,Card } from 'antd';
 import {MyLayout}     from '../common/layout.js';
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 const { Option, OptGroup } = Select;
 const TreeNode = Tree.TreeNode;
-var SalesMan = React.createClass({
+var SalesMan = require('create-react-class')({
 	getInitialState: function() {
 		return{
 			records:[],

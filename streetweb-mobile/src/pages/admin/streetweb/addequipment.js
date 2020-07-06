@@ -18,7 +18,7 @@ const columns = [ {
                 dataIndex: 'cat',
             }];
 
-const AddEquipment = React.createClass({
+const AddEquipment = require('create-react-class')({
   getInitialState: function() {
     return {
     	type:{},

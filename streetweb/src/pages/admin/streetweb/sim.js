@@ -16,7 +16,7 @@ function accAdd(arg1,arg2){
     return (arg1*m+arg2*m)/m
 }
 String.prototype.times = function(n) { return (new Array(n+1)).join(this);}; 
-const SimCard = React.createClass({
+const SimCard = require('create-react-class')({
 
 	getInitialState: function() {
 		return {

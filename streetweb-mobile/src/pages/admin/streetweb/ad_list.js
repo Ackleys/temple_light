@@ -5,7 +5,7 @@ import ReactDOM     from 'react-dom';
 import {  Button, Icon, Modal,Input,Table,Upload,Alert,Popconfirm,message,Switch} from 'antd';
 import {MyLayout}     from '../common/layout.js';
 import QRCode       from 'qrcode.react';
-const List = React.createClass({
+const List = require('create-react-class')({
     getInitialState: function() {
         return{
             records:[],
@@ -478,7 +478,7 @@ const List = React.createClass({
     }
 });
 
-const AdList = React.createClass({
+const AdList = require('create-react-class')({
     getInitialState: function() {
         return {
             show:false,

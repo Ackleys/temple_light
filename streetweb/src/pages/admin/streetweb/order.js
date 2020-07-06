@@ -4,7 +4,8 @@ import React        from 'react';
 import ReactDOM     from 'react-dom';
 import {Link}       from 'react-router';
 import moment       from 'moment';
-import {  Button, Menu,  Icon,  Table, Input,Alert,Tabs,DatePicker,Form,Select,message,Popconfirm} from 'antd';
+import { Form, Icon } from '@ant-design/compatible';
+import {  Button, Menu,  Table, Input,Alert,Tabs,DatePicker,Select,message,Popconfirm} from 'antd';
 import {MyLayout}     from '../common/layout.js';
 const { MonthPicker, RangePicker } = DatePicker;
 import 'moment/locale/zh-cn';
@@ -14,7 +15,7 @@ const Option = Select.Option;
 const dateFormat = 'YYYY-MM-DD HH:mm:ss';
 
 
-var Order = React.createClass({
+var Order = require('create-react-class')({
 
 	getInitialState: function() {
 	   return{

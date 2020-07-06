@@ -10,7 +10,7 @@ const Option = Select.Option;
 const CheckboxGroup = Checkbox.Group;
 const RadioGroup = Radio.Group;
 const TabPane = Tabs.TabPane;
-const EditEquipment = React.createClass({
+const EditEquipment = require('create-react-class')({
 
 	getInitialState: function() {
 	    return {

@@ -19,7 +19,7 @@ Array.prototype.remove = function(val) {
         this.splice(index, 1);
     }
 };
-var Level1Dlist = React.createClass({
+var Level1Dlist = require('create-react-class')({
     getInitialState: function() {
         return {
             loading:true,

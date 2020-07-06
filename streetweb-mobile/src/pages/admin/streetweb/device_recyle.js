@@ -10,7 +10,7 @@ const { MonthPicker, RangePicker } = DatePicker;
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-var DeviceRecyle = React.createClass({
+var DeviceRecyle = require('create-react-class')({
 
 	getInitialState: function() {
 	   return{

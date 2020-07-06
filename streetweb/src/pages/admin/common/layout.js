@@ -7,7 +7,7 @@ import { Layout, Button, Menu, Breadcrumb, Icon , Dropdown, Modal, Modalm, Alert
 const { Header, Content, Footer, Sider } = Layout;
 //const SubMenu = Menu.SubMenu;
 const { SubMenu } = Menu;
-const MyLayout = React.createClass({
+const MyLayout = require('create-react-class')({
 	getInitialState: function() {
 		return {
 		  //"meg_num":0,
@@ -140,7 +140,12 @@ const MyLayout = React.createClass({
 					{'title':'营业额查询','to':window.URL_PREFIX+'/turnover'},
 					{'title':'线上收益','to':window.URL_PREFIX+'/online'},
 					{'title':'提现','to':window.URL_PREFIX+'/withdraw'}
-				  ]},
+					]},
+					{
+						title: '寺庙管理',
+						icon: 'bank',
+						to: window.URL_PREFIX + '/temple',
+					},
 				  {"title":"设备管理","icon":"setting","children":[
 					{'title':'添加设备','to':window.URL_PREFIX+'/addequipment'},
 					//{'title':'编辑设备','to':window.URL_PREFIX+'/editequipment'},

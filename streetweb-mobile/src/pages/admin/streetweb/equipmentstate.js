@@ -21,7 +21,7 @@ function accAdd(arg1,arg2){
     return (arg1*m+arg2*m)/m
 }
 String.prototype.times = function(n) { return (new Array(n+1)).join(this);}; 
-var Edit = React.createClass({
+var Edit = require('create-react-class')({
 	getInitialState: function() {
 		return {
 			add_option:[],
@@ -539,7 +539,7 @@ var Edit = React.createClass({
 	}
 });
 Edit = Form.create()(Edit);
-const EquipmentState = React.createClass({
+const EquipmentState = require('create-react-class')({
 
 	getInitialState: function() {
 		return {

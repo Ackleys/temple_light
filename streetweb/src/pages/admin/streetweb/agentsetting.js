@@ -2,10 +2,11 @@
 
 import React        from 'react';
 import ReactDOM     from 'react-dom';
-import {  Button, Menu,  Icon, Modal,Input,Form ,message} from 'antd';
+import { Form, Icon } from '@ant-design/compatible';
+import {  Button, Menu, Modal,Input ,message} from 'antd';
 import {MyLayout}     from '../common/layout.js';
 const FormItem = Form.Item;
-var AgentSetting = React.createClass({
+var AgentSetting = require('create-react-class')({
   getInitialState: function() {
     return{
       min_withdraw:2,

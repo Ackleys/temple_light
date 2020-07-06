@@ -6,7 +6,7 @@ import {  Button, Menu,  Icon, Modal,Input,Form,Upload,message } from 'antd';
 import {MyLayout}     from '../common/layout.js';
 import {browserHistory} from 'react-router';
 const FormItem = Form.Item;
-var Alipay = React.createClass({
+var Alipay = require('create-react-class')({
   	getInitialState: function() {
 		return{
 			fileList0:[],

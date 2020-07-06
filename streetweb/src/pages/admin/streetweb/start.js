@@ -5,7 +5,7 @@ import ReactDOM     from 'react-dom';
 import {Button,Menu, Icon, Modal,Input,Table,message,Alert} from 'antd';
 import {MyLayout}     from '../common/layout.js';
 const Search = Input.Search;
-const List = React.createClass({
+const List = require('create-react-class')({
 	getInitialState: function() {
 		return{
 			records:[],
@@ -101,7 +101,7 @@ const List = React.createClass({
 		)
 	}
 });
-const Start = React.createClass({
+const Start = require('create-react-class')({
 	getInitialState: function() {
 		return{
 			records:[],

@@ -8,7 +8,7 @@ import {  Button, Menu,  Icon,  Table, Input, Modal, Alert,Tabs } from 'antd';
 import {MyLayout}     from '../common/layout.js';
 const InputGroup = Input.Group;
 const TabPane = Tabs.TabPane;
-const WithDraw = React.createClass({
+const WithDraw = require('create-react-class')({
     getInitialState: function() {
         return {
           	records:[],

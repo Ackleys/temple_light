@@ -2,11 +2,12 @@
 
 import React        from 'react';
 import ReactDOM     from 'react-dom';
-import {  Button, Modal,Input,Table,Form,message,Alert,Icon} from 'antd';
+import { Form, Icon } from '@ant-design/compatible';
+import {  Button, Modal,Input,Table,message,Alert} from 'antd';
 import {MyLayout}     from '../common/layout.js';
 import { browserHistory} from 'react-router';
 const FormItem = Form.Item;
-var AddL1 = React.createClass({
+var AddL1 = require('create-react-class')({
 	getInitialState: function() {
 		return{
 			records:[],

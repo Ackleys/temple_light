@@ -8,7 +8,7 @@ import {MyLayout}     from '../common/layout.js';
 import {List}      from './ad_list.js';
 const Option = Select.Option;
 const Search = Input.Search;
-const AdDevice = React.createClass({
+const AdDevice = require('create-react-class')({
     getInitialState: function() {
         return {
             loading:true,

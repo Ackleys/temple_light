@@ -5,7 +5,7 @@ import ReactDOM     from 'react-dom';
 import {  Button, Menu,  Icon, Modal,Input,message,Alert,Popconfirm, Radio } from 'antd';
 import {MyLayout}     from '../common/layout.js';
 
-const Uart = React.createClass({
+const Uart = require('create-react-class')({
     getInitialState: function() {
         return{
             product:[],

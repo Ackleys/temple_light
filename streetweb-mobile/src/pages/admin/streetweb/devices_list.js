@@ -14,7 +14,7 @@ const dataSource = new ListView.DataSource({
 });
 
 
-const DevicesList = React.createClass({
+const DevicesList = require('create-react-class')({
     getInitialState: function() {
         return {
             dataSource,

@@ -1561,7 +1561,9 @@ class Temple(db.Model):
     image = db.Column(db.String(128), nullable=False)
     halls = relationship('Hall', backref='temple')
     orders = relationship('TempleOrder', backref='temple', order_by='TempleOrder.ctime')
+    agent_id = db.Column(db.ForeignKey('agent.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
 
+    agent = relationship('Agent', backref=backref('temple', uselist=False))
     
 
 class Hall(db.Model):

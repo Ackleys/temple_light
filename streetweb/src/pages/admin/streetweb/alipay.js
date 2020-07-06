@@ -2,11 +2,12 @@
 
 import React        from 'react';
 import ReactDOM     from 'react-dom';
-import {  Button, Menu,  Icon, Modal,Input,Form,Upload,message } from 'antd';
+import { Form, Icon } from '@ant-design/compatible';
+import {  Button, Menu, Modal,Input,Upload,message } from 'antd';
 import {MyLayout}     from '../common/layout.js';
 import {browserHistory} from 'react-router';
 const FormItem = Form.Item;
-var Alipay = React.createClass({
+var Alipay = require('create-react-class')({
   	getInitialState: function() {
 		return{
 			fileList0:[],

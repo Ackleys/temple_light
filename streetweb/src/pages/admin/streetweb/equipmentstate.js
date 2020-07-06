@@ -4,7 +4,8 @@ import React        from 'react';
 import ReactDOM     from 'react-dom';
 import {Link}       from 'react-router';
 import QRCode       from 'qrcode.react';
-import {  Button, Menu,  Icon,  Table, Input,Alert,Modal,message,Tabs,Select,Checkbox,Radio,Form } from 'antd';
+import { Form, Icon } from '@ant-design/compatible';
+import {  Button, Menu,  Table, Input,Alert,Modal,message,Tabs,Select,Checkbox,Radio } from 'antd';
 import {MyLayout}     from '../common/layout.js';
 import { browserHistory} from 'react-router';
 const Search = Input.Search;
@@ -21,7 +22,7 @@ function accAdd(arg1,arg2){
     return (arg1*m+arg2*m)/m
 }
 String.prototype.times = function(n) { return (new Array(n+1)).join(this);}; 
-var Edit = React.createClass({
+var Edit = require('create-react-class')({
 	getInitialState: function() {
 		return {
 			add_option:[],
@@ -543,7 +544,7 @@ var Edit = React.createClass({
 	}
 });
 Edit = Form.create()(Edit);
-const EquipmentState = React.createClass({
+const EquipmentState = require('create-react-class')({
 
 	getInitialState: function() {
 		return {

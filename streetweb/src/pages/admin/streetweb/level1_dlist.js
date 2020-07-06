@@ -3,7 +3,8 @@
 import React        from 'react';
 import ReactDOM     from 'react-dom';
 import {Link}       from 'react-router';
-import {  Button, Menu,  Icon, Table,Modal,Input,Alert,message,Select,Form} from 'antd';
+import { Form, Icon } from '@ant-design/compatible';
+import {  Button, Menu, Table,Modal,Input,Alert,message,Select} from 'antd';
 import {MyLayout}     from '../common/layout.js';
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -19,7 +20,7 @@ Array.prototype.remove = function(val) {
         this.splice(index, 1);
     }
 };
-var Level1Dlist = React.createClass({
+var Level1Dlist = require('create-react-class')({
     getInitialState: function() {
         return {
             loading:true,

@@ -4,7 +4,8 @@ import React        from 'react';
 import ReactDOM     from 'react-dom';
 import {Link}       from 'react-router';
 import moment       from 'moment';
-import {  Button, Menu,  Icon,  Table, Input,Alert,Tabs,DatePicker,Form,Select,message } from 'antd';
+import { Form, Icon } from '@ant-design/compatible';
+import {  Button, Menu,  Table, Input,Alert,Tabs,DatePicker,Select,message } from 'antd';
 import {MyLayout}     from '../common/layout.js';
 const { MonthPicker, RangePicker } = DatePicker;
 const FormItem = Form.Item;
@@ -43,7 +44,7 @@ const columns = [ {
             }];
 
 
-var TurnOver = React.createClass({
+var TurnOver = require('create-react-class')({
   getInitialState: function() {
      return{
         "records":[],

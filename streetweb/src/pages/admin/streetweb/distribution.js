@@ -29,7 +29,7 @@ function accAdd(arg1,arg2){
 function accSub(arg1,arg2){ 
 return accAdd(arg1,-arg2); 
 } 
-const Distribution = React.createClass({
+const Distribution = require('create-react-class')({
     getInitialState: function() {
         return {
             loading:true,

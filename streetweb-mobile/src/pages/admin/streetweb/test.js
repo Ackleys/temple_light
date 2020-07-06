@@ -7,7 +7,7 @@ import {MyLayout}     from '../common/layout.js';
 const TabPane = Tabs.TabPane;
 const FormItem = Form.Item;
 const Option = Select.Option;
-var Test = React.createClass({
+var Test = require('create-react-class')({
     getInitialState: function() {
       return{
         tab:'脉冲',

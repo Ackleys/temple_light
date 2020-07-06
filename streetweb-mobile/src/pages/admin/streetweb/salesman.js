@@ -8,7 +8,7 @@ const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 const { Option, OptGroup } = Select;
 const TreeNode = Tree.TreeNode;
-var SalesMan = React.createClass({
+var SalesMan = require('create-react-class')({
 	getInitialState: function() {
 		return{
 			records:[],

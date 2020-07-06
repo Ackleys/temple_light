@@ -9,7 +9,7 @@ import { Stat } from 'g2';
 import {browserHistory } from 'react-router';
 
 
-const HomeIndex = React.createClass({
+const HomeIndex = require('create-react-class')({
 	getInitialState: function() {
 	  return{
 		  data: [],

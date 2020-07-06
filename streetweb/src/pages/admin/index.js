@@ -39,12 +39,13 @@ import Start           from './streetweb/start.js'
 import SimCard         from './streetweb/sim.js'
 import AdminUpdate     from './streetweb/admin_update.js'
 import Uart from './streetweb/uart.js';
+import Temple from './streetweb/temple.js';
 
 export default { TurnOver, HomeIndex, Login, OnLine, WithDraw ,AddEquipment,Order,EditEquipment,
 	EquipmentState,Group,Doll,Chair,Player,Agent,AgentSetting,WeChat,AddAdmin,AddL1,Errors,Test,
 	AdminList,L1List,Member,Alipay,Level1Dlist,DeviceRecyle,Api,SalesMan,MyEquipments,Distribution,
-	Advertiser,AdList,AdDevice,CouponReceipt,UserMsg,Start,SimCard,AdminUpdate, Uart};
+	Advertiser,AdList,AdDevice,CouponReceipt,UserMsg,Start,SimCard,AdminUpdate, Uart, Temple};
 export { TurnOver, HomeIndex, Login,OnLine, WithDraw ,AddEquipment,Order,EditEquipment,
 	EquipmentState,Group,Doll,Chair,Player,Agent,AgentSetting,WeChat,AddAdmin,AddL1,Errors,Test,
 	AdminList,L1List,Member,Alipay,Level1Dlist,DeviceRecyle,Api,SalesMan,MyEquipments,Distribution,
-	Advertiser,AdList,AdDevice,CouponReceipt,UserMsg,Start,SimCard,AdminUpdate, Uart};
+	Advertiser,AdList,AdDevice,CouponReceipt,UserMsg,Start,SimCard,AdminUpdate, Uart, Temple};

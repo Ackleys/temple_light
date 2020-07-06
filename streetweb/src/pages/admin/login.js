@@ -4,11 +4,12 @@ import React        from 'react';
 import ReactDOM     from 'react-dom';
 
 import { browserHistory} from 'react-router';
-import { Alert, Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Icon } from '@ant-design/compatible';
+import { Alert, Input, Button, Checkbox } from 'antd';
 const FormItem = Form.Item;
 
 
-var Login = React.createClass({
+var Login = require('create-react-class')({
   	getInitialState: function() {
 		return { 'errormsg': null };
   	},

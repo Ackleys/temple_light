@@ -6,7 +6,7 @@ import {  Button, Menu,  Icon, Modal,Input,Form,Upload,message } from 'antd';
 import {MyLayout}     from '../common/layout.js';
 import {browserHistory} from 'react-router';
 const FormItem = Form.Item;
-var WeChat = React.createClass({
+var WeChat = require('create-react-class')({
   	getInitialState: function() {
 		return{
 			fileList0:[],

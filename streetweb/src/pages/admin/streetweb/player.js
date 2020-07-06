@@ -5,7 +5,7 @@ import ReactDOM     from 'react-dom';
 import {  Button, Icon, Modal,Input,Table,Upload,Alert,Popconfirm,message,Switch} from 'antd';
 import {MyLayout}     from '../common/layout.js';
 
-const Player = React.createClass({
+const Player = require('create-react-class')({
     getInitialState: function() {
         return{
             records:[],

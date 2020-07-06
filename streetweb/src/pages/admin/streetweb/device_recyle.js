@@ -4,13 +4,14 @@ import React        from 'react';
 import ReactDOM     from 'react-dom';
 import {Link}       from 'react-router';
 
-import {  Button, Menu,  Icon,  Table, Input,Alert,Tabs,DatePicker,Form,Select,message } from 'antd';
+import { Form, Icon } from '@ant-design/compatible';
+import {  Button, Menu,  Table, Input,Alert,Tabs,DatePicker,Select,message } from 'antd';
 import {MyLayout}     from '../common/layout.js';
 const { MonthPicker, RangePicker } = DatePicker;
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-var DeviceRecyle = React.createClass({
+var DeviceRecyle = require('create-react-class')({
 
 	getInitialState: function() {
 	   return{

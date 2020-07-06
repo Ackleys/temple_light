@@ -2,10 +2,11 @@
 
 import React        from 'react';
 import ReactDOM     from 'react-dom';
-import {  Button, Menu,  Icon, Modal,Input,Form ,message,Table,Alert,Popconfirm} from 'antd';
+import { Form, Icon } from '@ant-design/compatible';
+import {  Button, Menu, Modal,Input ,message,Table,Alert,Popconfirm} from 'antd';
 import {MyLayout}     from '../common/layout.js';
 const ButtonGroup = Button.Group;
-var Api = React.createClass({
+var Api = require('create-react-class')({
     getInitialState: function() {
         return{
             btn1:'primary',

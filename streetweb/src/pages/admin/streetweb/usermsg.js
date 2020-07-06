@@ -2,12 +2,13 @@
 
 import React        from 'react';
 import ReactDOM     from 'react-dom';
-import {  Button, Menu, Icon, Modal,Input,Tabs,Form,Alert,Radio} from 'antd';
+import { Form, Icon } from '@ant-design/compatible';
+import {  Button, Menu, Modal,Input,Tabs,Alert,Radio} from 'antd';
 import {MyLayout}     from '../common/layout.js';
 const TabPane = Tabs.TabPane;
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
-var Test = React.createClass({
+var Test = require('create-react-class')({
     getInitialState: function() {
         return{
             tab:'基本信息',
