@@ -1,8 +1,8 @@
-"use strict";
-
+"use strict";;
 import React        from 'react';
 import ReactDOM     from 'react-dom';
-import {  Button, Menu,  Icon, Table,Input,Modal,Select,message,Alert,Tabs} from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { Button, Menu, Table, Input, Modal, Select, message, Alert, Tabs } from 'antd';
 import {Link}       from 'react-router';
 import {MyLayout}     from '../common/layout.js';
 const Option = Select.Option;
@@ -173,7 +173,7 @@ const AddEquipment = require('create-react-class')({
     return (
       <MyLayout>
         <div className='add_equ'>
-          <p>添加设备<Icon type="info-circle" onClick={this.help} /></p>
+          <p>添加设备<InfoCircleOutlined onClick={this.help} /></p>
           <Tabs defaultActiveKey="1" size="small" onChange={self.tabChange}>
             <TabPane tab="IMEI添加" key="1">
               <Input style={{width:'100%',marginTop:10}} placeholder='请输入IMEI' id='imei' onChange={this.handleChange} />

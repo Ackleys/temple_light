@@ -2,7 +2,7 @@
 
 import React        from 'react';
 import ReactDOM     from 'react-dom';
-import {  Button, Menu,  Icon,  Table } from 'antd';
+import { Button, Menu, Table } from 'antd';
 import {MyLayout}     from './common/layout.js';
 import createG2 from 'g2-react';
 import { Stat } from 'g2';

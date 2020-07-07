@@ -115,5 +115,3 @@ window.Array.prototype.bubble = function () {
         }
     }
 };
-
-export default {};

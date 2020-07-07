@@ -4,7 +4,19 @@ import React        from 'react';
 import ReactDOM     from 'react-dom';
 import {Link}       from 'react-router';
 import { browserHistory} from 'react-router';
-import {  Button, Menu,  Icon,  Table, Input ,Alert,Select,Checkbox,message,Modal,Radio,Tabs } from 'antd';
+import {
+    Button,
+    Menu,
+    Table,
+    Input,
+    Alert,
+    Select,
+    Checkbox,
+    message,
+    Modal,
+    Radio,
+    Tabs,
+} from 'antd';
 import {MyLayout}     from '../common/layout.js';
 const Option = Select.Option;
 const CheckboxGroup = Checkbox.Group;

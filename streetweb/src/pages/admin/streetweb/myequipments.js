@@ -1,14 +1,14 @@
-"use strict";
-
+"use strict";;
 import React        from 'react';
 import ReactDOM     from 'react-dom';
 import {Link}       from 'react-router';
 import QRCode       from 'qrcode.react';
-import {  Button, Menu,  Icon,  Table, Input,Alert,Modal,message } from 'antd';
+import { SettingOutlined } from '@ant-design/icons';
+import { Button, Menu, Table, Input, Alert, Modal, message } from 'antd';
 import {MyLayout}     from '../common/layout.js';
 import { browserHistory} from 'react-router';
 const Search = Input.Search;
-String.prototype.times = function(n) { return (new Array(n+1)).join(this);}; 
+String.prototype.times = function(n) { return (new Array(n+1)).join(this);};
 const MyEquipments = require('create-react-class')({
 
 	getInitialState: function() {
@@ -588,7 +588,7 @@ const MyEquipments = require('create-react-class')({
 						}, {
 							title: '编辑',
 							dataIndex: 'edit',
-							render:(text,re) => <a onClick={self.edit_equ.bind(self,re)}><Icon type="setting" /></a>,
+							render:(text,re) => <a onClick={self.edit_equ.bind(self,re)}><SettingOutlined /></a>,
 						}];
 		const rowSelection = {
 					selectedRowKeys:self.state.selectedRowKeys,

@@ -1,9 +1,22 @@
-"use strict";
-
+"use strict";;
 import React        from 'react';
 import ReactDOM     from 'react-dom';
-import {Link,browserHistory}from 'react-router';
-import { Layout, Button, Menu, Breadcrumb, Icon , Dropdown, Modal, Modalm, Alert, Input,message} from 'antd';
+import {Link,browserHistory}from 'react-router-dom';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { DownOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
+
+import {
+    Layout,
+    Button,
+    Menu,
+    Breadcrumb,
+    Dropdown,
+    Modal,
+    Modalm,
+    Alert,
+    Input,
+    message,
+} from 'antd';
 const { Header, Content, Footer, Sider } = Layout;
 //const SubMenu = Menu.SubMenu;
 const { SubMenu } = Menu;
@@ -444,19 +457,19 @@ const MyLayout = require('create-react-class')({
 				{
 					USER_NAVS.map(function(data,q){
 					  if(data.to){
-						return(
-							<Menu.Item key={q}>
-								<Icon type={data.icon}/>
+						return (
+                            <Menu.Item key={q}>
+								<LegacyIcon type={data.icon}/>
 								<Link href="#" to={data.to} style={{display:"inline-block",marginLeft:"-12px",width:'100%'}}>{data.title}</Link>
 							</Menu.Item>
-						  )
+                        );
 					  }else{
-						return(
-							<Menu.Item key={q}>
-								<Icon type={data.icon}/>
+						return (
+                            <Menu.Item key={q}>
+								<LegacyIcon type={data.icon}/>
 								<a href="#" onClick={data.onclick} style={{display:"inline-block",marginLeft:"-12px",width:'100%'}}>{data.title}</a>
 							</Menu.Item>
-						  )
+                        );
 					  }
 					})
 				}  
@@ -466,20 +479,20 @@ const MyLayout = require('create-react-class')({
 			<Menu>
 				{
 					NAVS.map(function(data,i){
-						return(
-							<Menu.Item key={i}>
-								<Icon type={data.icon} />
+						return (
+                            <Menu.Item key={i}>
+								<LegacyIcon type={data.icon} />
 								<Link className="nav_list" to={data.to}>
 									{data.title}
 								</Link>
 							</Menu.Item>
-						)
+                        );
 					})
 				}
 			</Menu>
 		)
 		return (
-			<Layout>
+            <Layout>
 				<Sider 
 				  style={{overflow: 'auto',minHeight:'100vh'}}
 				  >
@@ -487,8 +500,8 @@ const MyLayout = require('create-react-class')({
 						<img src= {self.state.logo} /><br />
 						<Dropdown overlay={menu} trigger={['click']}>
 							<a className="ant-dropdown-link" href="#">
-								<Icon type="user" />{self.state.name}
-								<Icon type="down" />
+								<UserOutlined />{self.state.name}
+								<DownOutlined />
 							</a>
 						</Dropdown>
 					</div>
@@ -502,31 +515,33 @@ const MyLayout = require('create-react-class')({
 					>
 						{
 						  NAVS.map(function(data,i){
-							if(data.children){
-							  return(
-								<SubMenu key={i}
-								  title={<span><Icon type={data.icon}/>{data.title}</span>}>
-								  {data.children.map(function (item, q){
-										return (
-											<Menu.Item key={i+"_"+q}>
-												<Icon type={item.icon} />
-												<Link to={item.to}>{item.title}</Link>
-											</Menu.Item>
-										);
-								  })}
-								</SubMenu>
-							  )
-							}else{
-								return(
-									<Menu.Item key={i}>
-										<Icon type={data.icon} />
-										<Link to={data.to}>
-											<span className="nav-text">{data.title}</span>
-										</Link>
-									</Menu.Item> 
-								)
-							}
-						  })
+								if (data.children) {
+									return (
+										<SubMenu 
+											key={i}
+											title={<span><LegacyIcon type={data.icon} />{data.title}</span>}
+										>
+											{data.children.map(function (item, q) {
+												return (
+													<Menu.Item key={i + "_" + q}>
+														<LegacyIcon type={item.icon} />
+														<Link to={item.to}>{item.title}</Link>
+													</Menu.Item>
+												);
+											})}
+										</SubMenu>
+									);
+								} else {
+									return (
+										<Menu.Item key={i}>
+											<LegacyIcon type={data.icon} />
+											<Link to={data.to}>
+												<span className="nav-text">{data.title}</span>
+											</Link>
+										</Menu.Item>
+									);
+								}
+							})
 						}
 					</Menu>
 				</Sider>
@@ -546,9 +561,9 @@ const MyLayout = require('create-react-class')({
 							  </Button>,
 							]}
 						>
-							<Input id="old" addonBefore={<Icon type="lock" />} type="password" placeholder="旧密码" onChange={this.handleChange} />
-							<Input id="new1" addonBefore={<Icon type="lock" />} type="password" placeholder="新密码" onChange={this.handleChange} />
-							<Input id="new2" addonBefore={<Icon type="lock" />} type="password" placeholder="新密码" onChange={this.handleChange} />
+							<Input id="old" addonBefore={<LockOutlined />} type="password" placeholder="旧密码" onChange={this.handleChange} />
+							<Input id="new1" addonBefore={<LockOutlined />} type="password" placeholder="新密码" onChange={this.handleChange} />
+							<Input id="new2" addonBefore={<LockOutlined />} type="password" placeholder="新密码" onChange={this.handleChange} />
 							{errormsg}
 						</Modal>
 					</Content>
@@ -556,8 +571,8 @@ const MyLayout = require('create-react-class')({
 					   Copyright © Forever zhuhao
 					</Footer>
 				</Layout>  
-			</Layout> 
-		);
+			</Layout>
+        );
 	}
 });
 export default MyLayout;

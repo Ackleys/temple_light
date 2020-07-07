@@ -2,7 +2,7 @@
 
 import React        from 'react';
 import ReactDOM     from 'react-dom';
-import {Button,Menu, Icon, Modal,Input,Table,message,Alert} from 'antd';
+import { Button, Menu, Modal, Input, Table, message, Alert } from 'antd';
 import {MyLayout}     from '../common/layout.js';
 const Search = Input.Search;
 const List = require('create-react-class')({

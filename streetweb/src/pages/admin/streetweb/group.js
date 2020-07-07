@@ -3,7 +3,7 @@
 import React        from 'react';
 import ReactDOM     from 'react-dom';
 import {Link}       from 'react-router';
-import {  Button, Menu,  Icon, Table,Modal,Input,Alert,message,Select,Popconfirm} from 'antd';
+import { Button, Menu, Table, Modal, Input, Alert, message, Select, Popconfirm } from 'antd';
 import {MyLayout}     from '../common/layout.js';
 const Option = Select.Option;
 const Search = Input.Search;

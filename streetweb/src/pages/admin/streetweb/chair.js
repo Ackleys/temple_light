@@ -2,7 +2,7 @@
 
 import React        from 'react';
 import ReactDOM     from 'react-dom';
-import {  Button, Menu,  Icon, Modal,Input,message,Alert,Popconfirm } from 'antd';
+import { Button, Menu, Modal, Input, message, Alert, Popconfirm } from 'antd';
 import {MyLayout}     from '../common/layout.js';
 
 const Chair = require('create-react-class')({

@@ -2,7 +2,7 @@
 
 import React        from 'react';
 import ReactDOM     from 'react-dom';
-import {  Button, Icon, Modal,Input,Table,Upload,Alert,Popconfirm,message,Switch} from 'antd';
+import { Button, Modal, Input, Table, Upload, Alert, Popconfirm, message, Switch } from 'antd';
 import {MyLayout}     from '../common/layout.js';
 const Search = Input.Search;
 const CouponReceipt = require('create-react-class')({

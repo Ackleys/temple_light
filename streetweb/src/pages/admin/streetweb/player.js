@@ -1,8 +1,8 @@
-"use strict";
-
+"use strict";;
 import React        from 'react';
 import ReactDOM     from 'react-dom';
-import {  Button, Icon, Modal,Input,Table,Upload,Alert,Popconfirm,message,Switch} from 'antd';
+import { DeleteOutlined, SettingOutlined, UploadOutlined } from '@ant-design/icons';
+import { Button, Modal, Input, Table, Upload, Alert, Popconfirm, message, Switch } from 'antd';
 import {MyLayout}     from '../common/layout.js';
 
 const Player = require('create-react-class')({
@@ -243,12 +243,12 @@ const Player = require('create-react-class')({
                         }, {
                             title: '编辑',
                             dataIndex: 'edit',
-                            render:(text,re) => <a onClick={()=>{this.setState({visible:true,id:re.id})}}><Icon type="setting" /></a>,
+                            render:(text,re) => <a onClick={()=>{this.setState({visible:true,id:re.id})}}><SettingOutlined /></a>,
                         }, {
                             title: '删除',
                             dataIndex: 'delete',
                             render:(text,re) => <Popconfirm title="确定删除该条广告吗" onConfirm={self.delete.bind(self,re.id)} okText="是" cancelText="否">
-                                                    <a ><Icon type="delete" /></a>
+                                                    <a ><DeleteOutlined /></a>
                                                 </Popconfirm>
                         }
                         ];
@@ -285,7 +285,7 @@ const Player = require('create-react-class')({
                     <div style={{marginTop:10}}>
                         <Upload name="img" fileList={self.state.fileList} customRequest={self.customRequest} onRemove={()=>{this.setState({fileList:[]})}}>
                             <Button>
-                                <Icon type="upload" /> 请上传500x200尺寸且不得大于50KB的jpg图片
+                                <UploadOutlined /> 请上传500x200尺寸且不得大于50KB的jpg图片
                             </Button>
                         </Upload>
                     </div>

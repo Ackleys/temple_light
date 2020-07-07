@@ -3,7 +3,7 @@
 import React        from 'react';
 import ReactDOM     from 'react-dom';
 import {Link}       from 'react-router';
-import {  Button, Menu,  Icon, Table,Modal,Input,Alert,message,Select} from 'antd';
+import { Button, Menu, Table, Modal, Input, Alert, message, Select } from 'antd';
 import {MyLayout}     from '../common/layout.js';
 const Option = Select.Option;
 Array.prototype.indexOf = function(val) {

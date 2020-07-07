@@ -4,7 +4,7 @@ import React        from 'react';
 import ReactDOM     from 'react-dom';
 import {Link}       from 'react-router';
 import QRCode       from 'qrcode.react';
-import {  Button, Menu,  Icon,  Table, Input, Modal, Alert,Tabs } from 'antd';
+import { Button, Menu, Table, Input, Modal, Alert, Tabs } from 'antd';
 import {MyLayout}     from '../common/layout.js';
 const InputGroup = Input.Group;
 const TabPane = Tabs.TabPane;
@@ -517,7 +517,7 @@ const WithDraw = require('create-react-class')({
                         base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) },  
                         format = function(s, c) {  
                             return s.replace(/{(\w+)}/g,  
-                                    function(m, p) { return c[p]; }) }  
+                                    function(m, p) { return c[p]; }); }  
                 return function(table, name) {  
                     table = $('div[aria-hidden="false"]').find('table')[0];
                     $('.order').attr('style',"mso-number-format:'\@';");

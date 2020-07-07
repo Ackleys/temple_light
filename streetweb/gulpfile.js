@@ -26,6 +26,9 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 const url = require('url');
 const runSequence = require('run-sequence');
 
+const livereload = require('gulp-livereload');
+const notify = require('gulp-notify');
+
 var ENTRIES = [
     './src/admin.js',
 ];
@@ -43,7 +46,7 @@ var BROWSERIFY_CONFIG_WECHAT = {
     "debug": DEBUG
 }
 var BABEL_OPTIONS = {
-    "presets": ['es2015', 'react'],
+    "presets": ['@babel/env', '@babel/react'],
     "ignore": [/\.\/node_modules\//],
     "plugins":[
         ["import",{"libraryName":"antd"}],
@@ -51,10 +54,11 @@ var BABEL_OPTIONS = {
             root: ['./src/'],
             alias: {
                 '@': '.',
-                '@admin': './src/pages/admin',
+                '@pages': './src/pages/admin/streetweb',
                 '@common': './src/pages/admin/common',
             }
         }],
+        '@babel/plugin-proposal-class-properties',
     ] ,
     "sourceMaps": true,
     "sourceMapsAbsolute": true,
@@ -141,9 +145,9 @@ function build() {
     });
 
     reversion();
-
     return es.merge.apply(null, jobs);
 }
+
 function build_r() {
     DEBUG = false;
     process.env.NODE_ENV = 'production';
@@ -201,7 +205,7 @@ b.on('update', function(ids) {  //监测文件改动
   });
 
 
-gulp.task('hmr', () => {
+gulp.task('hmr', async () => {
     const b = browserify({
         ...BROWSERIFY_CONFIG,
         plugin: [hmr, watchify],
@@ -231,14 +235,29 @@ gulp.task('hmr', () => {
 gulp.task('build', build);
 gulp.task('build-r', build_r);
 
+gulp.task('build2', () => 
+    browserify(BROWSERIFY_CONFIG)
+    .transform('babelify', BABEL_OPTIONS)
+    .bundle()
+    .on('error', on_error)
+    .pipe(source(ENTRIES[0]))
+    .pipe(buffer())
+    .pipe(rename({
+        dirname: '',
+        suffix: '.bundle'
+    }))
+    .pipe(gulp.dest('./assets/js'))
+    .pipe(notify('finish'))
+    .pipe(livereload())
+);
 
-gulp.task('watch', function () {
-    gulp.watch('./src/**/*.*', () => {
-        runSequence('build', 'reload');
-    });
+
+gulp.task('watch', done => {
+    gulp.watch('./src/**/*.*', gulp.series('build2', 'reload'));
+    done();
 });
 
-gulp.task('webserver', () => {
+gulp.task('webserver', done => {
     connect.server({
         livereload: true,
         port: 2333,
@@ -254,15 +273,21 @@ gulp.task('webserver', () => {
             history(),
         ])
     });
+    done();
 });
 
-gulp.task('reload', () => {
+gulp.task('reload', done => {
     gulp.src("./src/**/*.*")
         .pipe(connect.reload());
+    done();
 });
 
-gulp.task('dev', ['build', 'webserver', 'watch'], () => {
-    console.log('dev')
-});
+gulp.task('dev', gulp.series('build2', 'webserver', 'watch'));
 
-gulp.task('default', ['dev']);
+gulp.task('default', gulp.series('dev'));
+
+gulp.task('test', done => {
+    console.log('test!');
+    done();
+})
+

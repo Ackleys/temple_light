@@ -4,7 +4,7 @@ import React        from 'react';
 import ReactDOM     from 'react-dom';
 import {Link}       from 'react-router';
 import QRCode       from 'qrcode.react';
-import {  Button, Menu,  Icon,  Table, Input,Alert,Modal,message } from 'antd';
+import { Button, Menu, Table, Input, Alert, Modal, message } from 'antd';
 import {MyLayout}     from '../common/layout.js';
 import { browserHistory} from 'react-router';
 const Search = Input.Search;

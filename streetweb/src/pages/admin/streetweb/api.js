@@ -1,8 +1,8 @@
-"use strict";
-
+"use strict";;
 import React        from 'react';
 import ReactDOM     from 'react-dom';
 import { Form, Icon } from '@ant-design/compatible';
+import { PlusOutlined } from '@ant-design/icons';
 import {  Button, Menu, Modal,Input ,message,Table,Alert,Popconfirm} from 'antd';
 import {MyLayout}     from '../common/layout.js';
 const ButtonGroup = Button.Group;
@@ -148,7 +148,7 @@ var Api = require('create-react-class')({
     render: function (){
         let self = this;
         var errormsg = null;
-        let btn = <Button type='danger' style={{marginLeft:10}} icon='plus' onClick = {()=>{this.setState({visible:true})}}>新建应用</Button>;
+        let btn = <Button type='danger' style={{marginLeft:10}} icon={<PlusOutlined />} onClick = {()=>{this.setState({visible:true})}}>新建应用</Button>;
         let columns = [ {
                             title: 'app名称',
                             dataIndex: 'appname',

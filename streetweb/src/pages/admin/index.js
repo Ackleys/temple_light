@@ -39,7 +39,7 @@ import Start           from './streetweb/start.js'
 import SimCard         from './streetweb/sim.js'
 import AdminUpdate     from './streetweb/admin_update.js'
 import Uart from './streetweb/uart.js';
-import Temple from './streetweb/temple.js';
+import Temple from '@pages/temple';
 
 export default { TurnOver, HomeIndex, Login, OnLine, WithDraw ,AddEquipment,Order,EditEquipment,
 	EquipmentState,Group,Doll,Chair,Player,Agent,AgentSetting,WeChat,AddAdmin,AddL1,Errors,Test,
