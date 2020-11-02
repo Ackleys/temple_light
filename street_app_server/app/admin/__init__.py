@@ -3,6 +3,7 @@
 # 20170220 anChaOs
 
 from flask import Blueprint
+from functools import wraps
 
 admin_auth_blueprint = Blueprint('admin_auth', __name__)
 admin_device_blueprint = Blueprint('admin_device', __name__)
@@ -12,6 +13,8 @@ admin_god_blueprint = Blueprint('admin_god', __name__)
 admin_event_blueprint = Blueprint('admin_event', __name__)
 admin_openapp_blueprint = Blueprint('admin_openapp', __name__)
 admin_advertiser_blueprint = Blueprint('admin_advertiser', __name__)
+admin_temple_blueprint = Blueprint('admin_temple', __name__)
+
 
 # this should at last
 from . import auth_views
@@ -22,3 +25,4 @@ from . import god_views
 from . import event_views
 from . import openapp_views
 from . import advertiser_views
+from . import temple_view

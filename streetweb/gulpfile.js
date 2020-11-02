@@ -28,6 +28,8 @@ const runSequence = require('run-sequence');
 
 const livereload = require('gulp-livereload');
 const notify = require('gulp-notify');
+const less = require('gulp-less');
+const cssmin = require('gulp-minify-css')
 
 var ENTRIES = [
     './src/admin.js',
@@ -251,6 +253,12 @@ gulp.task('build2', () =>
     .pipe(livereload())
 );
 
+gulp.task('style', () => gulp
+    .src('./src/**/*.less')
+    .pipe(less())
+    .pipe(cssmin())
+    .pipe(gulp.dest('./assets/css'))
+);
 
 gulp.task('watch', done => {
     gulp.watch('./src/**/*.*', gulp.series('build2', 'reload'));

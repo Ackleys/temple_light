@@ -1,0 +1,60 @@
+
+.sider {
+  overflow: hidden;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  background: white;
+
+  .side-flex {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    height: 100%;
+
+    .logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 24px;
+      > a {
+        margin: 8px;
+      }
+    }
+
+    .menu {
+      @scrollbar-szie: 0px;
+      overflow: overlay;
+      border-right: 0px;
+      flex-grow: 1;
+      &::-webkit-scrollbar{
+        position: relative;
+        width: @scrollbar-szie;
+      }
+    
+      .ant-menu-item, .ant-menu-submenu-title {
+        width: 100%;
+        &::after {
+          border-right-width: 2px;
+        }
+      }
+    }
+  }
+}
+
+.site-layout {
+  overflow: initial;
+  background: #f0f2f5;
+  margin-left: 200px;
+  min-height: 100vh;
+
+  .content {
+    padding: 24px;
+    margin: 32px;
+    margin-bottom: 0px;
+    overflow: initial;
+    background: white;
+  }
+}
+

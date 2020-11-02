@@ -140,6 +140,10 @@ def add_agent_or_god(role):
         god_agent = dbapi.make_new_god_agent(god.id, new_agent.id)
         db.session.commit()
 
+        reply['data'] = {
+            'id': new_agent.id,
+        }
+
     elif role_bit == 0:
         raise ApiError('ERROR_AGENT_NO_PERMISSION', error.ERROR_AGENT_NO_PERMISSION)
 

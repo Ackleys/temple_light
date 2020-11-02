@@ -52,10 +52,11 @@ def create_app(config_name):
     from .admin import admin_event_blueprint
     from .admin import admin_openapp_blueprint
     from .admin import admin_advertiser_blueprint
+    from .admin import admin_temple_blueprint
+    from .admin import v2
 
-
+    
     app.register_blueprint(main_blueprint)
-
     #app.register_blueprint(Blueprint('assets', __name__, static_url_path='/assets', static_folder=config.ASSETS_PATH))
     #app.register_blueprint(Blueprint('adminpage', __name__, static_url_path='/adminpage', static_folder=config.ADMINPAGE_PATH))
 
@@ -70,6 +71,9 @@ def create_app(config_name):
     app.register_blueprint(admin_event_blueprint, url_prefix='/admin/event')
     app.register_blueprint(admin_openapp_blueprint, url_prefix='/admin/openapp')
     app.register_blueprint(admin_advertiser_blueprint, url_prefix='/admin/advertiser')
+    app.register_blueprint(admin_temple_blueprint, url_prefix='/admin/temple')
+
+    v2.init_app(app)
 
     return app
 

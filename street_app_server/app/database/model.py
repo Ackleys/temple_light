@@ -282,7 +282,7 @@ class Agent(db.Model):
 
     id      = db.Column(db.Integer, primary_key=True)
     salesman = db.Column(db.Integer, nullable=False, server_default='0')
-    openluat_user_id = db.Column(db.Integer, nullable=False)
+    openluat_user_id = db.Column(db.ForeignKey(u'user.id', ondelete=u'CASCADE', onupdate=u'CASCADE'), nullable=False)
     hook_agent_id = db.Column(db.Integer, nullable=False, server_default="1")
     level   = db.Column(db.Integer, nullable=False, server_default='0')
     slevel  = db.Column(db.Integer, nullable=False, server_default='0')
@@ -299,6 +299,9 @@ class Agent(db.Model):
     utime   = db.Column(db.DateTime, nullable=False)
 
     status  = db.Column(db.Integer, nullable=False, server_default="0")
+
+    devices = relationship('Device', backref='agent')
+    user = relationship('OpenLuatUser', backref=backref('agent', uselist=False))
 
     def __init__(self, salesman, user_id, hook_agent_id, level, slevel, expandable, withdrawable, name, phone, email, desc, address, remark):
         self.salesman = salesman
@@ -634,26 +637,7 @@ class DeviceAddress(db.Model):
     __tablename__ = 'device_address'
 
     id          = db.Column(db.Integer, primary_key=True)
-    agent_id    = db.Column(db.ForeignKey(u'agent.id', ondelete=u'CASCADE', onupdate=u'CASCADE'), nullable=False)
-    region      = db.Column(db.String(128), nullable=False, server_default="")
     address     = db.Column(db.String(128), nullable=False, server_default="")
-
-    ctime       = db.Column(db.DateTime, nullable=False)
-    utime       = db.Column(db.DateTime, nullable=False)
-
-    status      = db.Column(db.Integer, nullable=False, server_default="0")
-
-    def __init__(self, agent_id, region, address):
-        self.agent_id = agent_id
-        self.region = region
-        self.address = address
-
-        now = datetime.now()
-        self.ctime = now
-        self.utime = now
-
-    def __repr__(self):
-        return '<DeviceAddress: %r %r>' % (self.region, self.address)
 
 
 """
@@ -682,56 +666,11 @@ class Device(db.Model):
 
     id          = db.Column(db.Integer, primary_key=True)
     imei        = db.Column(db.String(32), nullable=False, unique=True, index=True)
-    cat         = db.Column(db.Integer, nullable=False, server_default="0")
-    agent_id    = db.Column(db.Integer, nullable=False, server_default="0")
-    owner_agent_id = db.Column(db.Integer, nullable=False)
-    salesman_agent_id = db.Column(db.Integer, nullable=False)
-    address_id  = db.Column(db.Integer, nullable=False, server_default="0")
-    map_display = db.Column(db.Integer, nullable=False, server_default="0")
-    l4          = db.Column(db.Float, nullable=False)
-    l3          = db.Column(db.Float, nullable=False)
-    l2          = db.Column(db.Float, nullable=False)
-    l1          = db.Column(db.Float, nullable=False)
-    sl1         = db.Column(db.Float, nullable=False)
-    sl2         = db.Column(db.Float, nullable=False)
-    sl3         = db.Column(db.Float, nullable=False)
-    remark      = db.Column(db.String(64), nullable=False, server_default="")
-    nopay       = db.Column(db.Integer, nullable=False, server_default="0")
-    coupon      = db.Column(db.Integer, nullable=False, server_default="0")
-    product_unit_price  = db.Column(db.Integer, nullable=False, server_default="100")
-    product_min_money   = db.Column(db.Integer, nullable=False, server_default="100")
-    product_unit        = db.Column(db.String(10), nullable=False, server_default="个")
-    product_unit_pluse  = db.Column(db.Integer, nullable=False, server_default="1")
-    low         = db.Column(db.Integer, nullable=False, server_default='50')
-    high         = db.Column(db.Integer, nullable=False, server_default='50')
+    agent_id    = db.Column(db.ForeignKey('agent.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
+    address_id  = db.Column(db.ForeignKey('device_address.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
+    remark      = db.Column(db.String(64), nullable=True, server_default="")
 
-    ctime       = db.Column(db.DateTime, nullable=False)
-    utime       = db.Column(db.DateTime, nullable=False)
-
-    status      = db.Column(db.Integer, nullable=False, server_default="0")
-
-    def __init__(self, imei, cat, agent_id, owner_agent_id, address_id):
-        self.imei = imei
-        self.agent_id = agent_id
-        self.owner_agent_id = owner_agent_id
-        self.salesman_agent_id = 0
-        self.address_id = address_id
-        self.cat = cat
-        self.l1 = 0
-        self.l2 = 0
-        self.l3 = 0
-        self.l4 = 1
-        self.sl1 = 0
-        self.sl2 = 0
-        self.sl3 = 0
-        self.remark = ''
-
-        now = datetime.now()
-        self.ctime = now
-        self.utime = now
-
-    def __repr__(self):
-        return '<Device: %r>' % self.imei
+    address = relationship('DeviceAddress', backref=backref('device', uselist=False))
 
 
 class DeviceDistribution(db.Model):
@@ -1559,8 +1498,9 @@ class Temple(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), nullable=False, server_default="")
     image = db.Column(db.String(128), nullable=False)
+    contact_name = db.Column(db.String(64), nullable=False)
+    contact_info = db.Column(db.String(64), nullable=False)
     halls = relationship('Hall', backref='temple')
-    orders = relationship('TempleOrder', backref='temple', order_by='TempleOrder.ctime')
     agent_id = db.Column(db.ForeignKey('agent.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
 
     agent = relationship('Agent', backref=backref('temple', uselist=False))
@@ -1577,7 +1517,7 @@ class Hall(db.Model):
     durations = relationship('Duration', backref='hall')
     lights = relationship('Light', backref='hall')
     device = relationship('Device', backref=backref('hall', uselist=False))
-
+    orders = relationship('HallOrder', backref='hall', order_by='HallOrder.ctime')
 
 class Light(db.Model):
     __tablename__ = 'light'
@@ -1597,8 +1537,8 @@ class Duration(db.Model):
     duration = db.Column(db.Float, nullable=False)
     hall_id = db.Column(db.ForeignKey('hall.id', ondelete='CASCADE', onupdate='CASCADE'))
 
-class TempleOrder(db.Model):
-    __tablename__ = 'temple_order'
+class HallOrder(db.Model):
+    __tablename__ = 'hall_order'
 
     id = db.Column(db.Integer, primary_key=True)
     customer = db.Column(db.String(64), nullable=False)
@@ -1607,13 +1547,15 @@ class TempleOrder(db.Model):
     desire = db.Column(db.String(255), nullable=False)
     ctime = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
-    record_id = db.Column(db.ForeignKey('record.id', ondelete='CASCADE', onupdate='CASCADE'))
+    # record_id = db.Column(db.ForeignKey('record.id', ondelete='CASCADE', onupdate='CASCADE'))
     duration_id = db.Column(db.ForeignKey('duration.id', ondelete='CASCADE', onupdate='CASCADE'))
-    temple_id = db.Column(db.ForeignKey('temple.id', ondelete='CASCADE', onupdate='CASCADE'))
+    hall_id = db.Column(db.ForeignKey('hall.id', ondelete='CASCADE', onupdate='CASCADE'))
+    pay_id = db.Column(db.ForeignKey('pay.id', ondelete='CASCADE', onupdate='CASCADE'))
 
-    items = relationship('OrderItem', backref='templeOrder')
-    record = relationship('Record', backref=backref('templeOrder', uselist=False))
-
+    items = relationship('OrderItem', backref='order')
+    # record = relationship('Record', backref=backref('templeOrder', uselist=False))
+    duration = relationship('Duration', backref=backref('order', uselist=False))
+    pay = relationship('Pay', backref=backref('order', uselist=False))
 
 class OrderItem(db.Model):
     __tablename__ = 'order_item'
@@ -1621,7 +1563,17 @@ class OrderItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     num = db.Column(db.Integer, nullable=False)
 
-    temple_order_id = db.Column(db.ForeignKey('temple_order.id', ondelete='CASCADE', onupdate='CASCADE'))
+    hall_order_id = db.Column(db.ForeignKey('hall_order.id', ondelete='CASCADE', onupdate='CASCADE'))
     light_id = db.Column(db.ForeignKey('light.id', ondelete='CASCADE', onupdate='CASCADE'))
 
     light = relationship('Light', backref=backref('orderItem', uselist=False))
+
+
+class DeviceV2(db.Model):
+    __tablename__ = 'device_v2'
+    id = db.Column(db.Integer, primary_key=True)
+    template = db.Column(db.String(255), nullable=False)
+    exp_resp = db.Column(db.String(255), nullable=False)
+    device_id = db.Column(db.ForeignKey('device.id', ondelete='CASCADE', onupdate='CASCADE'), nullable=False)
+
+    device = relationship('Device', backref=backref('v2', uselist=False, cascade='all, delete-orphan'))

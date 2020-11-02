@@ -14,6 +14,7 @@ ASSETS_PATH = '/root/projects/fw-share/streetweb/assets'
 ADMINPAGE_PATH = '/root/projects/fw-share/streetweb'
 
 V2_IMG_URL = '/static/img/v2'
+V2_IMG_PATH = './app/static/img/v2'
 
 from .wechat_config import *
 from .ali_config import *

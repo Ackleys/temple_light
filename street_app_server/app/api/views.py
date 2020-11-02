@@ -14,7 +14,7 @@ from functools import wraps
 
 # flask
 from flask import Flask, request, session, jsonify, current_app, g
-from flask import redirect, url_for, render_template, make_response
+from flask import redirect, url_for, render_template, make_response, render_template_string
 
 # flask-login
 from flask_login import login_user, logout_user, current_user
@@ -57,7 +57,9 @@ from urllib.parse import quote
 from flask_jwt import JWT, jwt_required, current_identity
 from werkzeug.security import safe_str_cmp
 
-from app.database.model import Duration, Hall, Light
+from app.database.model import Duration, Hall, Light, OrderItem, HallOrder
+
+import binascii
 
 @api_blueprint.errorhandler(ApiError)
 def handle_api_error(current_error):
@@ -1425,8 +1427,8 @@ def ali_notify():
 def handle_bad_request(err):
     return err.get_response()
 
-
 def openid_required(func):
+    @wraps(func)
     def wrapper(*args, **kwargs):
         try:
             g.openid = request.headers['authorization']
@@ -1454,9 +1456,22 @@ global_defs = {
     }
 }
 
+def cors(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        resp = func(*args, **kwargs)
+        resp.headers['Access-Control-Allow-Origin'] = '*'
+        resp.headers['Access-Control-Allow-Methods'] = 'HEAD, OPTIONS, GET, POST, DELETE, PUT'
+        resp.headers['Access-Control-Allow-Headers'] = 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild'
+        return resp
+    return wrapper
 
+@api_blueprint.route('/v2/user', methods=["OPTIONS"])
+@cors
+def v2_user_options():
+    return make_response(jsonify({'Allow': '*'}), 200)
 
-@api_blueprint.route('/v2/user' ,methods=["GET"])
+@api_blueprint.route('/v2/user' ,methods=["POST"])
 @expects_json({
     'type': 'object',
     'properties': {
@@ -1483,7 +1498,8 @@ global_defs = {
         },
     ],
     **global_defs,
-}) 
+}, force=True) 
+@cors
 def v2_user():
     # 前端判断jwt里是否有openid
     # 0111WHv92Ld0mM0nyQv92dOEv921WHvR
@@ -1537,13 +1553,21 @@ def v2_user():
     #方案1: 直接url填写后端url，后端获取到openid再302跳转到前端
 
     #方案2: 直接url填写前端url，前端再次调用后端api，后端返回openid
+    return make_response(jsonify(reply), status_code)
 
-    resp = make_response(jsonify(reply), status_code)
-    resp.headers['Access-Control-Allow-Origin'] = '*'
-    return resp
+# def json_to_g(func):
+#     @wraps(func)
+#     def wrapper(*arg, **kwargs):
+#         g.data = jsonify()
+#         func(*arg, **kwargs)
+#     return wrapper
 
+@api_blueprint.route('/v2/temple', methods=["OPTIONS"])
+@cors
+def v2_temple_options():
+    return make_response(jsonify({'Allow': '*'}), 200)
 
-@api_blueprint.route('/v2/temple',  methods=["GET"])
+@api_blueprint.route('/v2/temple',  methods=["POST"])
 @expects_json({
     'type': 'object',
     'properties': {
@@ -1551,7 +1575,8 @@ def v2_user():
     },
     'required': ['imei'],
     **global_defs,
-})
+}, force=True)
+@cors
 def v2_temple():
     print('GET temple')
     reply ,status_code = {'code': 0}, 200
@@ -1577,18 +1602,22 @@ def v2_temple():
             } for duration in hall.durations],
             **({'current': True} if device.hall == hall else {}),
         } for hall in temple.halls],
-        'recents': [{
-            'customer': order.customer,
-            'lights': [item.light.name for item in order.items],
-            **({'hall': order.items[0].light.hall.name} if len(order.items) > 0 else {}),
-        } for order in temple.orders[:5]]
+        # 'recents': [{
+        #     'customer': order.customer,
+        #     'lights': [item.light.name for item in order.items],
+        #     **({'hall': order.items[0].light.hall.name} if len(order.items) > 0 else {}),
+        # } for order in temple.orders[:5]]
     }
 
-    resp = make_response(jsonify(reply), status_code)
-    resp.headers['Access-Control-Allow-Origin'] = '*'
-    return resp
+    return make_response(jsonify(reply), status_code)
+
+@api_blueprint.route('/v2/order', methods=["OPTIONS"])
+@cors
+def v2_order_options():
+    return make_response(jsonify({'Allow': '*'}), 200)
 
 @api_blueprint.route('/v2/order',  methods=["POST"])
+@cors
 @expects_json({
     'type': 'object',
     'properties': {
@@ -1649,7 +1678,7 @@ def v2_temple():
     },
     'required': ['customer', 'duration', 'lights'],
     **global_defs,
-}, fill_defaults=True)
+}, fill_defaults=True, force=True)
 @openid_required
 def v2_order():
     dbg('POST order')
@@ -1658,6 +1687,7 @@ def v2_order():
     hall = Hall.query.get(g.data['hall']['id'])
     duration = Duration.query.get(g.data['duration']['id'])
     if duration not in hall.durations:
+        print('duration error')
         raise ApiError('ERROR_DEVICE_NOT_FOUND', error.ERROR_DEVICE_NOT_FOUND)
 
     lights = [{
@@ -1665,17 +1695,18 @@ def v2_order():
         'obj': Light.query.get(light['id']),
     } for light in g.data['lights']]
     if(any([light['obj'] not in hall.lights for light in lights])):
+        print('light error')
         raise ApiError('ERROR_DEVICE_NOT_FOUND', error.ERROR_DEVICE_NOT_FOUND)
 
     total = duration.duration * sum([light['obj'].price * light['num'] for light in lights])
     print('total price:', total)
 
     device = hall.device
-
+    print('openid', g.oauth_user.openid)
     data = wechat_make_new_pay(
         device.link.product,
         f'1{datetime.now().strftime("%Y%m%d%H%M%S")}{f"{dbapi.get_max_pay_id()}"[-4:]}', 
-        device.owner_agent_id, 
+        device.agent_id, 
         g.oauth_user.user_id,
         device.imei, 
         'JSAPI',
@@ -1683,20 +1714,81 @@ def v2_order():
         price=total * 100
     )
 
+    customer = g.data['customer']
+    order = HallOrder(
+        customer=customer['name'],
+        sex=customer['sex'],
+        telephone=customer['phone'],
+        desire=customer['desire'],
+        duration_id=g.data['duration']['id'],
+        pay_id=data['id']
+    )
+    for item in g.data['lights']:
+        order.items.append(
+            OrderItem(
+                num=item['num'],
+                light_id=item['id'],
+            )
+        )
+    hall.orders.append(order)
+    db.session.commit()
+
+    data['id'] = order.id
+    
     # 前端 -> /v2/api/pay
     # 后端 <- pay_request
     # 前端 -> WeixinJSBridge.invoke('getBrandWCPayRequest')
 
+    # 创建订单 -> [查询订单是否成功] -> 订单完成后启动设备
 
+    # data.data.id => TODO
+    ## 会在localstorg里放入pay_id
+    ## 通过/api/pay/query 查询支付结果
+    ## 如果确定支付成功则调用启动设备(启动设备也需要pay_id作为参数)
 
     reply['data'] = data
+    return make_response(jsonify(reply), status_code)
 
 
-    resp = make_response(jsonify(reply), status_code)
-    resp.headers['Access-Control-Allow-Origin'] = '*'
-    return resp
+@api_blueprint.route('/v2/service', methods=["OPTIONS"])
+@cors
+def v2_service_options():
+    return make_response(jsonify({'Allow': '*'}), 200)
 
+@api_blueprint.route('/v2/service',  methods=["POST"])
+@expects_json({
+    'type': 'object',
+    'properties': {
+        'order_id': {'type': 'integer'},
+    },
+    'required': ['order_id'],
+}, force=True)
+@openid_required
+@cors
+def v2_service():
+    dbg('POST service')
+    order = HallOrder.query.get(g.data['order_id'])
+    if not order:
+        raise ApiError('ERROR_DEVICE_NOT_FOUND', error.ERROR_DEVICE_NOT_FOUND)
+    device = order.hall.device
+    # TODO: 根据订单信息替换模板字符串
 
-@api_blueprint.route('/v2/collection', methods=["GET"])
-def collection_v2():
-    return redirect('https://www.getpostman.com/collections/6d8bd74c6cca144a2811')
+    rendered = render_template_string(device.v2.template, **{
+        'customer': order.customer,
+        'desire': order.desire,
+        'totalLightsNum': sum([item.num for item in order.items]),
+        'duration': int(order.duration.duration),
+        'newline': '\r\n'
+    }).replace(r'\r', '\r').replace(r'\n', '\n')
+
+    target = binascii.hexlify(rendered.encode('gb2312')).decode('utf-8')
+    exp_resp = binascii.hexlify(device.v2.exp_resp.encode('gb2312')).decode('utf-8')
+    print('rendered', rendered)
+    print('target', target)
+
+    succ, result = launch_uart_deivce_v2(device.imei, target, exp_resp)
+    if not succ:
+        #TODO 退款
+        ...
+
+    return jsonify(result)

@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+  "baseUrl": "./",
+  "paths": {
+    "@pages": ["./src/pages/admin"],
+    "@common/*": ["./src/pages/admin/common/*"],
+    "@pages/*": ["./src/pages/admin/streetweb/*"],
+    "@api/*": ["./src/api/*"]
+  }
+  }
+}
